@@ -7,7 +7,7 @@
 
 # Site Settings
 locale                   : "en-US"
-title                    : "Nicholas A. Jensen"
+title                    : "Nicholas A. Jensen / Economics is Everywhere"
 title_separator          : "-"
 name                     : &name "Nicholas A. Jensen"
 description              : &description "Economics PhD Student"
@@ -82,7 +82,7 @@ analytics:
 author:
   name             : "Nicholas A. Jensen"
   avatar           : "profile.png"
-  bio              : 
+  bio              :  "Economics PhD Student"
   location         : "Murfreesboro, TN"
   employer         : "Middle Tennesse State University"
   pubmed           : #"https://www.ncbi.nlm.nih.gov/pubmed/?term=john+snow"

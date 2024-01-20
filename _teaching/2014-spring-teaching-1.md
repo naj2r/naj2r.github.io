@@ -1,5 +1,5 @@
 ---
-title: "Teaching - Principles of Macroecomics"
+title: "Teaching - Principles of Macroeconomics"
 collection: teaching
 type: "Undergraduate course"
 permalink: /teaching/2024-spring-teaching-1

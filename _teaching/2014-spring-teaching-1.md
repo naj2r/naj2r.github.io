@@ -13,8 +13,8 @@ This is a placeholder description of a teaching experience. More details will be
 Teaching Documents
 ======
 
-Class Ratings Information
+``` Class Ratings Information
 ======
 
-Heading 3
+
 ======

@@ -7,7 +7,7 @@
 
 # Site Settings
 locale                   : "en-US"
-title                    : "Nicholas A. Jensen / Economics is Everywhere"
+title                    : "Nicholas A. Jensen"
 title_separator          : "-"
 name                     : &name "Nicholas A. Jensen"
 description              : &description "Economics PhD Student"

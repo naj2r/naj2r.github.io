@@ -9,8 +9,6 @@ venue: 'under review - working paper'
 paperurl: 'https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4767976'
 citation: 'Benzecry, Gabriel and Jensen, Nicholas and Smith, Daniel J., The Socialists’ Hypotheses and The Road to Serfdom (March 21, 2024). Available at SSRN: https://ssrn.com/abstract=4767976 or http://dx.doi.org/10.2139/ssrn.4767976'
 ---
-This paper is about the number 1. The number 2 is left for future work.
-
 [Download paper here](https://papers.ssrn.com/sol3/Delivery.cfm/SSRN_ID4767976_code1309874.pdf?abstractid=4767976&mirid=1)
 
-Recommended citation: Benzecry, Gabriel and Jensen, Nicholas and Smith, Daniel J., The Socialists’ Hypotheses and The Road to Serfdom (March 21, 2024). Available at SSRN: https://ssrn.com/abstract=4767976 or http://dx.doi.org/10.2139/ssrn.4767976
+Recommended citation: Benzecry, Gabriel and Jensen, Nicholas and Smith, Daniel J., The Socialists’ Hypotheses and The Road to Serfdom (March 21, 2024). Available at SSRN:  http://dx.doi.org/10.2139/ssrn.4767976

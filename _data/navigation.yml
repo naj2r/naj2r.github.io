@@ -4,8 +4,8 @@ main:
   - title: "CV"
     url: /files/cv1.pdf
 
-  - title: "Research"
-    url: /research/
+  - title: "Research & Publications"
+    url: /publications/
 
   - title: "Teaching"
     url: /teaching/

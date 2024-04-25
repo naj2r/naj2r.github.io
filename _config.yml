@@ -10,7 +10,7 @@ locale                   : "en-US"
 title                    : "Nicholas A. Jensen"
 title_separator          : "-"
 name                     : &name "Nicholas A. Jensen"
-description              : &description "Economics PhD Student"
+description              : &description "Nicholas Jensen's Personal Website - Economist"
 url                      : https://naj2r.github.io # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
 repository               : "academicpages/academicpages.github.io"
@@ -50,7 +50,9 @@ atom_feed:
   path                   : # blank (default) uses feed.xml
 
 # SEO Related
-google_site_verification :
+google_site_verification :"google-site-verification=k1MDOYwzJCJ37hL1LYx4PXisZ0UsTCjpyMms3_s4Q4s"
+
+
 bing_site_verification   :
 alexa_site_verification  :
 yandex_site_verification :

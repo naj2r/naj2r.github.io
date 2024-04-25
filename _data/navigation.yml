@@ -2,8 +2,7 @@
 main:
     
   - title: "CV"
-    url: /files/cv1.pdf
-
+    url: /files/Academic_CV_4-16-2024_Jensen.pdf
   - title: "Research & Publications"
     url: /publications/
 

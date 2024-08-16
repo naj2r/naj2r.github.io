@@ -8,12 +8,11 @@ date: 2024-01-01
 location: "Murfreesboro, TN"
 ---
 
-This is a placeholder description of a teaching experience. More details will be added later.
-
 Teaching Documents
 ======
 
-``` Class Ratings Information
+
+`` Class Ratings Information
 ======
 
 

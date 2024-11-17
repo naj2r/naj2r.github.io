@@ -20,7 +20,7 @@ shape prosecutor discretion and case outcomes in the criminal justice system.'
 date: 2024-11-14
 venue: 'Unpublished Working Paper'
 #slidesurl: 'http://academicpages.github.io/files/slides1.pdf'
-paperurl: 'http://academicpages.github.io/files/The_Effects_of_Prosecutor_Turnover_on_Criminal_Case_Outcomes_11-14.pdf'
+paperurl: '/https:/nicholas-jensen.com/files/The_Effects_of_Prosecutor_Turnover_on_Criminal_Case_Outcomes_11-14.pdf'
 #citation: 'Jensen, Nicholas. (2024). &quot;Paper Title Number 1.&quot; <i>Journal 1</i>. 1(1).'
 ---
 Working Paper; do not cite.

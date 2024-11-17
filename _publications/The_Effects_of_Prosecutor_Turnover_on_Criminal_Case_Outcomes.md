@@ -1,5 +1,5 @@
 ---
-title: "Paper Title Number 1"
+title: "The Effects of Prosecutor Turnover on Criminal Case Outcomes"
 collection: publications
 category: manuscripts
 permalink: /publication/The_Effects_of_Prosecutor_Turnover_on_Criminal_Case_Outcomes

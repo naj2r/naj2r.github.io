@@ -35,7 +35,11 @@ format:
 :::
 
 ::: {.cv-contact}
-[***REMOVED***]{.cv-left} [Website: [nicholas-jensen.com](https://nicholas-jensen.com/) | ORCID: [0009-0004-1858-3803](https://orcid.org/0009-0004-1858-3803)]{.cv-right}
+[***REMOVED***]{.cv-left} [Website: [nicholas-jensen.com](https://nicholas-jensen.com/)]{.cv-right}
+:::
+
+::: {.cv-contact}
+[]{.cv-left} [ORCID: [0009-0004-1858-3803](https://orcid.org/0009-0004-1858-3803)]{.cv-right}
 :::
 
 ## Education
@@ -104,15 +108,15 @@ Troy University, Economics Dept.
 
 ### Journal Articles
 
-- Benzecry, G. F., Jensen, N., & Smith, D. J. (2025). "The Socialists' Hypotheses and *The Road to Serfdom*." *Journal of the History of Economic Thought*, (forthcoming).
+- D'Andrea, F., Vaca Pereira Rocha, H., Jensen, N., Blizard, Z., & Melo, V. "Economic Freedom and Rent Seeking: Evidence from US States." *Public Choice*, (forthcoming).
 
 - Benzecry, G. F., Jensen, N., & Smith, D. J. (2025). "The Road to Serfdom and the Definitions of Socialism, Planning, and the Welfare State During the First Half of the 20th Century." *History of Political Economy*, 57(3), 441--475. [doi: 10.1215/00182702-11773500](https://doi.org/10.1215/00182702-11773500)
 
-- D'Andrea, F., Vaca Pereira Rocha, H., Jensen, N., Blizard, Z., & Melo, V. "Economic Freedom and Rent Seeking: Evidence from US States." *Public Choice*, (forthcoming).
+- Benzecry, G. F., Jensen, N., & Smith, D. J. (2025). "The Socialists' Hypotheses and *The Road to Serfdom*." *Journal of the History of Economic Thought*, 47(3), 291--316. [doi: 10.1017/S1053837224000336](https://doi.org/10.1017/S1053837224000336)
 
 ### Book Chapters
 
-- Benzecry, G. F., & Jensen, N. A. (2025). "Mises: The Disutility of Labor." (forthcoming).
+- Benzecry, G. F., & Jensen, N. A. (2025). "Mises: The Disutility of Labor." In G. Callahan (Ed.), *The Concept of Work in the History of European Philosophy*. Palgrave Studies in Classical Liberalism. Palgrave Macmillan. [doi: 10.1007/978-3-031-96547-0_14](https://doi.org/10.1007/978-3-031-96547-0_14)
 
 ### Under Review
 
@@ -121,26 +125,18 @@ Troy University, Economics Dept.
 ### Working Papers
 
 - "The Effects of Prosecutor Turnover on Criminal Case Outcomes"
-- "The Effects of Prosecutor and Public Defender Elections on Criminal Case Outcomes" (with Joshua Ammons)
-
-### Works in Progress
-
 - "Electoral Pressure and the Shadow of Trial: Prosecutors and Jury Mobilization" (with Joshua Ammons)
+
+<!-- ### Works in Progress -->
 
 ## Professional Activities and Achievements
 
 ### Presentations
 
 ::: {.cv-entry}
-Southern Economic Association 93rd Annual Conference, New Orleans, LA
+Southern Economic Association Annual Conference, Washington, D.C.
 
-[November 20, 2023]{.date}
-:::
-
-::: {.cv-entry}
-Association of Private Enterprise Education Annual Meeting, Las Vegas, NV
-
-[April 7-9, 2024]{.date}
+[November 22-25, 2024]{.date}
 :::
 
 ::: {.cv-entry}
@@ -150,18 +146,24 @@ American Law & Economics Association 34th Annual Meeting, Ann Arbor, MI
 :::
 
 ::: {.cv-entry}
-Southern Economic Association Annual Conference, Washington, D.C.
+Association of Private Enterprise Education Annual Meeting, Las Vegas, NV
 
-[November 22-25, 2024]{.date}
+[April 7-9, 2024]{.date}
 :::
 
-### Invited Talks
+::: {.cv-entry}
+Southern Economic Association 93rd Annual Conference, New Orleans, LA
+
+[November 20, 2023]{.date}
+:::
+
+<!-- ### Invited Talks
 
 ::: {.cv-entry}
 A Statewide Analysis of All Crime Offenses During COVID. Annual Conference for Criminal Justice Educators
 
 [June 2023]{.date}
-:::
+::: -->
 
 ### Colloquia, Conferences and Workshops
 
@@ -298,7 +300,7 @@ Instructor evaluation: 4.05 / 5.0 (43 students, in-person class)
 ::: {.cv-entry}
 ECON 2420 Principles of Microeconomics
 
-[Fall 2025]{.date}
+[Fall 2024]{.date}
 :::
 
 ### Troy University --- Graduate Teaching Assistant
@@ -317,9 +319,9 @@ ECON 2252 Principles of Microeconomics
 
 ## Media Appearances
 
-- ["Area Experts Warn Against Potential Price Highs, Supply Lows."](https://www.thedailytimes.com/news/area-experts-warn-against-potential-price-highs-supply-lows/article_912776a7-3d29-4ce6-8068-0278718bce4f.html) *The Daily Times*, April 5, 2025.
-
 - ["Knoxville Ranks Low on Rent Affordability."](https://www.wate.com/news/top-stories/knoxville-ranks-low-on-rent-affordability/) *WATE 6 News*, April 22, 2025.
+
+- ["Area Experts Warn Against Potential Price Highs, Supply Lows."](https://www.thedailytimes.com/news/area-experts-warn-against-potential-price-highs-supply-lows/article_912776a7-3d29-4ce6-8068-0278718bce4f.html) *The Daily Times*, April 5, 2025.
 
 - ["Knoxville Boutique Owner Braces for Possible Price Hikes as Tariffs Loom."](https://www.wbir.com/article/news/local/knoxville-boutique-owner-braces-for-possible-price-hikes-from-tariffs/51-78ea28af-3b51-4f6a-8d61-be792a69f688) *WBIR 10 News*, 2025.
 

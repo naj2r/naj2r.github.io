@@ -5,6 +5,19 @@
 \usepackage{hyperref}
 \usepackage{titlesec}
 
+% Compact title - override Quarto's default huge title
+\makeatletter
+\renewcommand{\maketitle}{%
+  \begin{center}
+    {\Large\bfseries \@title}\\[4pt]
+    {\normalsize \@subtitle}
+  \end{center}
+  \vspace{-0.5em}
+  \rule{\textwidth}{0.4pt}
+  \vspace{0.3em}
+}
+\makeatother
+
 % Link color
 \definecolor{cvlinkcolor}{RGB}{6,125,233}
 \hypersetup{

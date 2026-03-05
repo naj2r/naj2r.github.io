@@ -4,11 +4,59 @@ title: "Research & Publications"
 
 You can also find my articles on my [Google Scholar profile](https://scholar.google.com/citations?user=LdRrAegAAAAJ&hl=en).
 
+## Journal Articles
+
+### Economic Freedom and Rent Seeking: Evidence from US States
+
+**Fabricio D'Andrea, Hugo Vaca Pereira Rocha, Nicholas Jensen, Zachary Blizard, and Vitor Melo** | *Public Choice*, (forthcoming)
+
+---
+
+### The Road to Serfdom and the Definitions of Socialism, Planning, and the Welfare State, 1930--1950
+
+**Gabriel Benzecry, Nicholas Jensen, and Daniel J. Smith** | *History of Political Economy*, 57(3), 441--475, 2025
+
+There is a long-standing debate about whether the central hypothesis of F. A. Hayek's *The Road to Serfdom* (TRTS), warning of the incompatibility between socialism and democracy, extended to welfare states. The empirical validity of Hayek's hypothesis hinges on his definition of socialism. We build on previous works contextualizing and interpreting TRTS by examining the common definitions of socialism, capitalism, and the welfare state primarily between 1930-1950 according to 1) socialist intellectuals, especially those Hayek was engaging in TRTS, 2) reviews and responses to TRTS, 3) liberal intellectuals, and 4) prominent politicians and other public intellectuals in London. We find that socialism was commonly understood to mean economic planning under state ownership of the means of production. Those advocating for the expansion of welfare programs often held that state control or ownership of the means of production was necessary to fund social redistribution. Our findings bolster the interpretation of Hayek's central hypothesis in TRTS as being limited to economic planning under state control or ownership of the means of production.
+
+[doi: 10.1215/00182702-11773500](https://doi.org/10.1215/00182702-11773500){.btn .btn-primary}
+
+---
+
+### The Socialists' Hypotheses and *The Road to Serfdom*
+
+**Gabriel Benzecry, Nicholas Jensen, and Daniel J. Smith** | *Journal of the History of Economic Thought*, 47(3), 291--316, 2025
+
+This paper examines the writings of socialist scholars who played a pivotal role in shaping Hayek's perspective in TRTS, including William Beveridge, Stuart Chase, Henry Dickinson, Hugh Dalton, Evan Durbin, Oskar Lange, Harold Laski, Abba Lerner, Barbara Wootton, and the contributing authors in Findlay Mackenzie's *Planned Society* (1937). Many socialist thinkers held two main hypotheses. First, industrial concentration was inevitable under capitalism. Second, they argued that government ownership or control of key economic sectors was necessary to protect democracy from industrial consolidation in the capitalist system and to reduce political opposition to complete state ownership or control over the means of production. Despite sharing Hayek's concern for socialism's potential erosion of democratic freedoms, these socialist hypotheses have received much less scholarly attention than Hayek's TRTS. We conclude that Hayek formalized socialist scholars' fears and developed a well-defined hypothesis that central planning could threaten democratic freedoms.
+
+[doi: 10.1017/S1053837224000336](https://doi.org/10.1017/S1053837224000336){.btn .btn-primary}
+
+---
+
+## Book Chapters
+
+### Mises: The Disutility of Labor
+
+**Gabriel Benzecry and Nicholas A. Jensen** | In G. Callahan (Ed.), *The Concept of Work in the History of European Philosophy*. Palgrave Studies in Classical Liberalism. Palgrave Macmillan, 2025
+
+[doi: 10.1007/978-3-031-96547-0_14](https://doi.org/10.1007/978-3-031-96547-0_14){.btn .btn-primary}
+
+---
+
+## Under Review
+
+### Regulatory Rollback and the Smoking Tailpipe: Air-Quality Effects of Repealing Vehicle Emissions Testing
+
+**Nicholas Jensen, Patricia J. Hummel, and Nicholas Reinarts** | at *Journal of Regulatory Economics*
+
+[Preprint](https://www.researchsquare.com/article/rs-8753461/latest){.btn .btn-primary}
+
+---
+
 ## Working Papers
 
 ### The Effects of Prosecutor Turnover on Criminal Case Outcomes
 
-**Nicholas Jensen** | *Unpublished Working Paper* | November 2024
+**Nicholas Jensen** | *Working Paper*
 
 How does election turnover influence prosecutor behavior and the outcomes of criminal cases? This study explores how first-term district attorneys (DAs) adjust case strategies under unique electoral and institutional pressures to build public credibility, by examining how new prosecutors signal competence to voters through case outcomes, including plea bargains, dismissals, and jury convictions. Employing a dynamic difference-in-difference (DID) approach across three U.S. states, the analysis reveals that prosecutor turnover is associated with an increase in plea bargain convictions as reelection approaches. In contrast to prior research findings, we find that new prosecutors do not significantly increase jury trial convictions before elections. These findings suggest that new prosecutors' electoral vulnerability promotes a strategic shift towards risk-averse behavior, prioritizing plea bargains over jury trials to manage caseloads and signal effectiveness. This study expands existing knowledge of how electoral incentives and career concerns shape prosecutor discretion and case outcomes in the criminal justice system.
 
@@ -16,28 +64,6 @@ How does election turnover influence prosecutor behavior and the outcomes of cri
 
 ---
 
-## Forthcoming
+### Electoral Pressure and the Shadow of Trial: Prosecutors and Jury Mobilization
 
-### The Road to Serfdom and the Definitions of Socialism, Planning, and the Welfare State, 1930-1950
-
-**Gabriel Benzecry, Nicholas Jensen, and Daniel J. Smith** | *Forthcoming at History of Political Economy* | July 2024
-
-There is a long-standing debate about whether the central hypothesis of F. A. Hayek's *The Road to Serfdom* (TRTS), warning of the incompatibility between socialism and democracy, extended to welfare states. The empirical validity of Hayek's hypothesis hinges on his definition of socialism. We build on previous works contextualizing and interpreting TRTS by examining the common definitions of socialism, capitalism, and the welfare state primarily between 1930-1950 according to 1) socialist intellectuals, especially those Hayek was engaging in TRTS, 2) reviews and responses to TRTS, 3) liberal intellectuals, and 4) prominent politicians and other public intellectuals in London. We find that socialism was commonly understood to mean economic planning under state ownership of the means of production. Those advocating for the expansion of welfare programs often held that state control or ownership of the means of production was necessary to fund social redistribution. Our findings bolster the interpretation of Hayek's central hypothesis in TRTS as being limited to economic planning under state control or ownership of the means of production.
-
-[Download from SSRN](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4892215){.btn .btn-primary}
-
-**Citation:** Benzecry, Gabriel and Jensen, Nicholas and Smith, Daniel J., The Road to Serfdom and the Definitions of Socialism, Planning, and the Welfare State, 1930-1950 (July 11, 2024). Available at SSRN: <https://ssrn.com/abstract=4892215>
-
----
-
-## Under Review
-
-### The Socialists' Hypotheses and The Road to Serfdom
-
-**Gabriel Benzecry, Nicholas Jensen, and Daniel J. Smith** | *Under Review --- Working Paper* | March 2024
-
-This paper examines the writings of socialist scholars who played a pivotal role in shaping Hayek's perspective in TRTS, including William Beveridge, Stuart Chase, Henry Dickinson, Hugh Dalton, Evan Durbin, Oskar Lange, Harold Laski, Abba Lerner, Barbara Wootton, and the contributing authors in Findlay Mackenzie's *Planned Society* (1937). Many socialist thinkers held two main hypotheses. First, industrial concentration was inevitable under capitalism. Second, they argued that government ownership or control of key economic sectors was necessary to protect democracy from industrial consolidation in the capitalist system and to reduce political opposition to complete state ownership or control over the means of production. Despite sharing Hayek's concern for socialism's potential erosion of democratic freedoms, these socialist hypotheses have received much less scholarly attention than Hayek's TRTS. We conclude that Hayek formalized socialist scholars' fears and developed a well-defined hypothesis that central planning could threaten democratic freedoms.
-
-[Download from SSRN](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4767976){.btn .btn-primary}
-
-**Citation:** Benzecry, Gabriel and Jensen, Nicholas and Smith, Daniel J., The Socialists' Hypotheses and The Road to Serfdom (March 21, 2024). Available at SSRN: <https://ssrn.com/abstract=4767976>
+**Nicholas Jensen and Joshua Ammons** | *Working Paper*

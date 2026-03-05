@@ -2,10 +2,29 @@
 title: "Teaching"
 ---
 
-## Principles of Macroeconomics
+## Maryville College --- Visiting Lecturer
 
-**Middle Tennessee State University, Department of Economics** | Spring 2024
+| Course | Term |
+|---|---|
+| ECN 210 Principles of Economics | Spring 2025 |
+| ECN 332-01 & ECN 332-02 Money & Banking | Spring 2025 |
+| STA 120 Introductory Statistics | Summer 2025 |
 
-*Undergraduate course*
+---
 
-Murfreesboro, TN
+## Middle Tennessee State University --- Instructor
+
+| Course | Term | Evaluation |
+|---|---|---|
+| ECON 2410 Principles of Macroeconomics | Fall 2023 | 3.98 / 5.0 (25 students) |
+| ECON 2410 Principles of Macroeconomics | Spring 2024 | 4.05 / 5.0 (43 students) |
+| ECON 2420 Principles of Microeconomics | Fall 2024 | |
+
+---
+
+## Troy University --- Graduate Teaching Assistant
+
+| Course | Term |
+|---|---|
+| ECON 4451 Economics of Globalization | Spring 2021 |
+| ECON 2252 Principles of Microeconomics | Fall 2019, Fall 2020 |

@@ -17,6 +17,9 @@ about:
     - icon: linkedin
       text: LinkedIn
       href: https://www.linkedin.com/in/nicholas-a-jensen
+    - icon: newspaper
+      text: Substack
+      href: https://trialbystandarderrors.substack.com
 ---
 
 ## Bio

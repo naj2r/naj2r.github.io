@@ -1,0 +1,38 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Nicholas A. Jensen"
+  description: "Nicholas Jensen's Personal Website - Economist"
+  site-url: https://nicholas-jensen.com
+  navbar:
+    background: "#2c3e50"
+    foreground: "#ecf0f1"
+    left:
+      - href: index.qmd
+        text: Home
+      - href: research/index.qmd
+        text: Research & Publications
+      - href: teaching.qmd
+        text: Teaching
+      - href: talks.qmd
+        text: Talks
+    right:
+      - href: cv.qmd
+        text: CV
+      - icon: github
+        href: https://github.com/naj2r
+      - icon: linkedin
+        href: https://www.linkedin.com/in/nicholas-a-jensen
+  page-footer:
+    center: "&copy; 2024-2026 Nicholas A. Jensen"
+
+format:
+  html:
+    theme: [flatly, styles.scss]
+    toc: true
+    toc-depth: 3
+    code-copy: true
+    code-overflow: wrap
+    link-external-newwindow: true

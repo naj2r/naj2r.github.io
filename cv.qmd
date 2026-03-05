@@ -1,0 +1,328 @@
+---
+title: "Nicholas A. Jensen"
+subtitle: "Curriculum Vitae"
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    filters:
+      - templates/cv-filter.lua
+  pdf:
+    documentclass: scrartcl
+    geometry:
+      - top=1in
+      - bottom=1in
+      - left=1in
+      - right=1in
+    mainfont: "Times New Roman"
+    fontsize: 12pt
+    include-in-header: templates/cv-header.tex
+    colorlinks: true
+    filters:
+      - templates/cv-filter.lua
+---
+
+::: {.content-visible when-format="html"}
+[Download CV as PDF](cv.pdf){.btn .btn-primary}
+:::
+
+::: {.cv-contact}
+[Stephenson Institute for Classical Liberalism]{.cv-left} [Phone: (+1) 205-362-0487]{.cv-right}
+:::
+
+::: {.cv-contact}
+[Wabash College]{.cv-left} [Email: [jensenn@wabash.edu](mailto:jensenn@wabash.edu)]{.cv-right}
+:::
+
+::: {.cv-contact}
+[5825 Sunset Way Apt 2312, Whitestown, IN 46075]{.cv-left} [Website: [nicholas-jensen.com](https://nicholas-jensen.com/) | ORCID: [0009-0004-1858-3803](https://orcid.org/0009-0004-1858-3803)]{.cv-right}
+:::
+
+## Education
+
+::: {.cv-entry}
+**Ph.D., Economics**, Middle Tennessee State University, Murfreesboro, TN
+
+[August 2025]{.date}
+:::
+
+::: {.cv-entry}
+**M.A., Economics**, Troy University, Troy, AL
+
+[2021]{.date}
+:::
+
+::: {.cv-entry}
+**B.S., Economics**, Troy University, Troy, AL
+
+[2019]{.date}
+:::
+
+## Academic Employment
+
+::: {.cv-entry}
+**Post-doctoral Scholar-in-Residence**
+
+[July 2025 -- Present]{.date}
+:::
+
+::: {.cv-detail}
+Stephenson Institute for Classical Liberalism, Wabash College
+:::
+
+::: {.cv-entry}
+**Visiting Lecturer in Economics**
+
+[January 2025 -- July 2025]{.date}
+:::
+
+::: {.cv-detail}
+Maryville College, Social Sciences Division
+:::
+
+::: {.cv-entry}
+**Graduate Teaching & Research Assistant**
+
+[2021 -- 2024]{.date}
+:::
+
+::: {.cv-detail}
+Middle Tennessee State University, Economics Dept.
+:::
+
+::: {.cv-entry}
+**Graduate Teaching Assistant**
+
+[2019 -- 2021]{.date}
+:::
+
+::: {.cv-detail}
+Troy University, Economics Dept.
+:::
+
+## Research
+
+### Journal Articles
+
+- Benzecry, G. F., Jensen, N., & Smith, D. J. (2025). "The Socialists' Hypotheses and *The Road to Serfdom*." *Journal of the History of Economic Thought*, (forthcoming).
+
+- Benzecry, G. F., Jensen, N., & Smith, D. J. (2025). "The Road to Serfdom and the Definitions of Socialism, Planning, and the Welfare State During the First Half of the 20th Century." *History of Political Economy*, 57(3), 441--475. [doi: 10.1215/00182702-11773500](https://doi.org/10.1215/00182702-11773500)
+
+- D'Andrea, F., Vaca Pereira Rocha, H., Jensen, N., Blizard, Z., & Melo, V. "Economic Freedom and Rent Seeking: Evidence from US States." *Public Choice*, (forthcoming).
+
+### Book Chapters
+
+- Benzecry, G. F., & Jensen, N. A. (2025). "Mises: The Disutility of Labor." (forthcoming).
+
+### Under Review
+
+- "Regulatory Rollback and the Smoking Tailpipe: Air-Quality Effects of Repealing Vehicle Emissions Testing" (with Patricia J. Hummel and Nicholas Reinarts), at *Journal of Regulatory Economics* | [Preprint](https://www.researchsquare.com/article/rs-8753461/latest)
+
+### Working Papers
+
+- "The Effects of Prosecutor Turnover on Criminal Case Outcomes"
+- "The Effects of Prosecutor and Public Defender Elections on Criminal Case Outcomes" (with Joshua Ammons)
+
+### Works in Progress
+
+- "Electoral Pressure and the Shadow of Trial: Prosecutors and Jury Mobilization" (with Joshua Ammons)
+
+## Professional Activities and Achievements
+
+### Presentations
+
+::: {.cv-entry}
+Southern Economic Association 93rd Annual Conference, New Orleans, LA
+
+[November 20, 2023]{.date}
+:::
+
+::: {.cv-entry}
+Association of Private Enterprise Education Annual Meeting, Las Vegas, NV
+
+[April 7-9, 2024]{.date}
+:::
+
+::: {.cv-entry}
+American Law & Economics Association 34th Annual Meeting, Ann Arbor, MI
+
+[May 17-18, 2024]{.date}
+:::
+
+::: {.cv-entry}
+Southern Economic Association Annual Conference, Washington, D.C.
+
+[November 22-25, 2024]{.date}
+:::
+
+### Invited Talks
+
+::: {.cv-entry}
+A Statewide Analysis of All Crime Offenses During COVID. Annual Conference for Criminal Justice Educators
+
+[June 2023]{.date}
+:::
+
+### Colloquia, Conferences and Workshops
+
+::: {.cv-entry}
+2025 Seminar and Conference on Voluntary Governance (University of Buckingham)
+
+[September 4-7, 2025]{.date}
+:::
+
+::: {.cv-entry}
+Politics, Philosophy, and Economics Workshop (Chapman University)
+
+[July 2024]{.date}
+:::
+
+::: {.cv-entry}
+Causal Inference I Workshop with Scott Cunningham
+
+[February 2024]{.date}
+:::
+
+::: {.cv-entry}
+Regression Discontinuity Workshop with Rocio Titiunik
+
+[May 2023]{.date}
+:::
+
+::: {.cv-entry}
+Causal Inference II Workshop with Scott Cunningham
+
+[March 2023]{.date}
+:::
+
+### Awards, Honors, and Grants
+
+::: {.cv-entry}
+Hayek Fund for Scholars
+
+[2024]{.date}
+:::
+
+::: {.cv-entry}
+APEE Young Scholar's Award
+
+[2024]{.date}
+:::
+
+::: {.cv-entry}
+Mercatus Frederic Bastiat Fellowship, Mercatus Center
+
+[2023 -- 2024]{.date}
+:::
+
+::: {.cv-entry}
+Political Economy Research Institute Fellowship
+
+[2021 -- Present]{.date}
+:::
+
+::: {.cv-detail}
+Middle Tennessee State University
+:::
+
+::: {.cv-entry}
+Johnson Center Masters in Economics Assistantship
+
+[2019 -- 2021]{.date}
+:::
+
+::: {.cv-detail}
+Troy University
+:::
+
+::: {.cv-entry}
+Sorrell College of Business Undergraduate Research Showcase, 3rd Place - Economics
+
+[2018]{.date}
+:::
+
+::: {.cv-detail}
+Troy University
+:::
+
+::: {.cv-entry}
+Chancellor's Scholarship, Troy University
+
+[2014 -- 2019]{.date}
+:::
+
+## Teaching Experience
+
+### Maryville College --- Visiting Lecturer
+
+::: {.cv-entry}
+ECN 210 Principles of Economics
+
+[Spring 2025]{.date}
+:::
+
+::: {.cv-entry}
+ECN 332-01 & ECN 332-02 Money & Banking
+
+[Spring 2025]{.date}
+:::
+
+::: {.cv-entry}
+STA 120 Introductory Statistics
+
+[Summer 2025]{.date}
+:::
+
+### Middle Tennessee State University --- Instructor
+
+::: {.cv-entry}
+ECON 2410 Principles of Macroeconomics
+
+[Fall 2023]{.date}
+:::
+
+::: {.cv-detail}
+Instructor evaluation: 3.98 / 5.0 (25 students, in-person class)
+:::
+
+::: {.cv-entry}
+ECON 2410 Principles of Macroeconomics
+
+[Spring 2024]{.date}
+:::
+
+::: {.cv-detail}
+Instructor evaluation: 4.05 / 5.0 (43 students, in-person class)
+:::
+
+::: {.cv-entry}
+ECON 2420 Principles of Microeconomics
+
+[Fall 2025]{.date}
+:::
+
+### Troy University --- Graduate Teaching Assistant
+
+::: {.cv-entry}
+ECON 4451 Economics of Globalization
+
+[Spring 2021]{.date}
+:::
+
+::: {.cv-entry}
+ECON 2252 Principles of Microeconomics
+
+[Fall 2019, Fall 2020]{.date}
+:::
+
+## Media Appearances
+
+- ["Area Experts Warn Against Potential Price Highs, Supply Lows."](https://www.thedailytimes.com/news/area-experts-warn-against-potential-price-highs-supply-lows/article_912776a7-3d29-4ce6-8068-0278718bce4f.html) *The Daily Times*, April 5, 2025.
+
+- ["Knoxville Ranks Low on Rent Affordability."](https://www.wate.com/news/top-stories/knoxville-ranks-low-on-rent-affordability/) *WATE 6 News*, April 22, 2025.
+
+- ["Knoxville Boutique Owner Braces for Possible Price Hikes as Tariffs Loom."](https://www.wbir.com/article/news/local/knoxville-boutique-owner-braces-for-possible-price-hikes-from-tariffs/51-78ea28af-3b51-4f6a-8d61-be792a69f688) *WBIR 10 News*, 2025.
+
+## References
+
+*Available upon request.*

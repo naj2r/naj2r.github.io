@@ -31,11 +31,15 @@ format:
 :::
 
 ::: {.cv-contact}
-[Wabash College]{.cv-left} [Email: [jensenn@wabash.edu](mailto:jensenn@wabash.edu)]{.cv-right}
+[Wabash College]{.cv-left} [Institutional Email: [jensenn@wabash.edu](mailto:jensenn@wabash.edu)]{.cv-right}
 :::
 
 ::: {.cv-contact}
-[5825 Sunset Way Apt 2312, Whitestown, IN 46075]{.cv-left} [Website: [nicholas-jensen.com](https://nicholas-jensen.com/)]{.cv-right}
+[5825 Sunset Way Apt 2312, Whitestown, IN 46075]{.cv-left} [Personal Email: [nicholasjensen414@gmail.com](mailto:nicholasjensen414@gmail.com)]{.cv-right}
+:::
+
+::: {.cv-contact}
+[]{.cv-left} [Website: [nicholas-jensen.com](https://nicholas-jensen.com/)]{.cv-right}
 :::
 
 ::: {.cv-contact}

@@ -6,8 +6,11 @@ about:
   image-shape: round
   links:
     - icon: envelope
-      text: Email
+      text: Institutional Email
       href: mailto:jensenn@wabash.edu
+    - icon: envelope-at
+      text: Personal Email
+      href: mailto:nicholasjensen414@gmail.com
     - icon: mortarboard
       text: Google Scholar
       href: https://scholar.google.com/citations?user=LdRrAegAAAAJ&hl=en

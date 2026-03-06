@@ -6,6 +6,7 @@ website:
   title: "Nicholas A. Jensen"
   description: "Nicholas Jensen's Personal Website - Economist"
   site-url: https://nicholas-jensen.com
+  favicon: images/Thumbnail.png
   navbar:
     background: "#2c3e50"
     foreground: "#ecf0f1"

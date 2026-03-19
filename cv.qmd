@@ -27,19 +27,15 @@ format:
 :::
 
 ::: {.cv-contact}
-[Stephenson Institute for Classical Liberalism]{.cv-left} []{.cv-right}
+[Stephenson Institute for Classical Liberalism]{.cv-left} [Institutional Email: [jensenn@wabash.edu](mailto:jensenn@wabash.edu)]{.cv-right}
 :::
 
 ::: {.cv-contact}
-[Wabash College]{.cv-left} [Institutional Email: [jensenn@wabash.edu](mailto:jensenn@wabash.edu)]{.cv-right}
+[Wabash College]{.cv-left} [Personal Email: [nicholasjensen414@gmail.com](mailto:nicholasjensen414@gmail.com)]{.cv-right}
 :::
 
 ::: {.cv-contact}
-[418 S Grant Ave, Crawfordsville, IN 47933]{.cv-left} [Personal Email: [nicholasjensen414@gmail.com](mailto:nicholasjensen414@gmail.com)]{.cv-right}
-:::
-
-::: {.cv-contact}
-[]{.cv-left} [Website: [nicholas-jensen.com](https://nicholas-jensen.com/)]{.cv-right}
+[418 S Grant Ave, Crawfordsville, IN 47933]{.cv-left} [Website: [nicholas-jensen.com](https://nicholas-jensen.com/)]{.cv-right}
 :::
 
 ::: {.cv-contact}

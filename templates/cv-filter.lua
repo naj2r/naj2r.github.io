@@ -193,7 +193,12 @@ function Div(el)
         if p.side == "right" then right = p.text end
       end
 
-      return pandoc.RawBlock("latex", "\\noindent " .. left .. "\\hfill " .. right .. "\\par\\vspace{1pt}")
+      local raw = "\\noindent"
+        .. "\\begin{minipage}[t]{0.45\\textwidth}" .. left .. "\\end{minipage}"
+        .. "\\hfill"
+        .. "\\begin{minipage}[t]{0.52\\textwidth}\\raggedleft " .. right .. "\\end{minipage}"
+        .. "\\par\\vspace{1pt}"
+      return pandoc.RawBlock("latex", raw)
     else
       return el
     end

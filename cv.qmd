@@ -134,6 +134,24 @@ Troy University, Economics Dept.
 ### Presentations
 
 ::: {.cv-entry}
+Public Choice Society Annual Conference, San Antonio, TX
+
+[March 14, 2026]{.date}
+:::
+
+::: {.cv-entry}
+Southern Economic Association 96th Annual Meeting, Houston, TX
+
+[November 21-23, 2025]{.date}
+:::
+
+::: {.cv-entry}
+Public Choice Society Annual Conference, Louisville, KY
+
+[March 6-8, 2025]{.date}
+:::
+
+::: {.cv-entry}
 Southern Economic Association Annual Conference, Washington, D.C.
 
 [November 22-25, 2024]{.date}

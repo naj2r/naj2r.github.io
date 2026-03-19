@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://nicholas-jensen.com/index.html</loc>
-    <lastmod>2026-03-06T00:24:20.856Z</lastmod>
-  </url>
-  <url>
     <loc>https://nicholas-jensen.com/teaching.html</loc>
-    <lastmod>2026-03-05T21:42:34.153Z</lastmod>
+    <lastmod>2026-03-19T21:51:02.025Z</lastmod>
   </url>
   <url>
     <loc>https://nicholas-jensen.com/research/index.html</loc>
-    <lastmod>2026-03-05T21:54:20.073Z</lastmod>
+    <lastmod>2026-03-19T21:51:02.024Z</lastmod>
   </url>
   <url>
     <loc>https://nicholas-jensen.com/cv.html</loc>
-    <lastmod>2026-03-06T00:24:48.091Z</lastmod>
+    <lastmod>2026-03-19T21:51:01.883Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nicholas-jensen.com/index.html</loc>
+    <lastmod>2026-03-19T21:51:02.023Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nicholas-jensen.com/talks.html</loc>
+    <lastmod>2026-03-19T21:51:02.025Z</lastmod>
   </url>
 </urlset>

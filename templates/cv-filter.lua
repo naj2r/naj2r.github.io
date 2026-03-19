@@ -97,19 +97,21 @@ function Div(el)
       if #left_blocks > 0 and left_blocks[1].t == "Para" then
         local left_text = left_blocks[1].content
         if date_text then
-          -- Entry with right-aligned date using \hfill
-          local raw = "\\noindent "
-          -- Check if first inline is Strong (bold)
+          -- Entry with right-aligned date using minipage pair to prevent overflow
+          local left_content = ""
           if left_text[1] and left_text[1].t == "Strong" then
-            raw = raw .. "\\textbf{" .. latex_stringify(left_text[1]) .. "}"
-            -- Add remaining inlines
+            left_content = "\\textbf{" .. latex_stringify(left_text[1]) .. "}"
             for i = 2, #left_text do
-              raw = raw .. latex_stringify(left_text[i])
+              left_content = left_content .. latex_stringify(left_text[i])
             end
           else
-            raw = raw .. latex_stringify(pandoc.Para(left_text))
+            left_content = latex_stringify(pandoc.Para(left_text))
           end
-          raw = raw .. "\\hfill \\textit{" .. escape_latex(date_text) .. "}\\par\\vspace{1pt}"
+          local raw = "\\noindent"
+            .. "\\begin{minipage}[t]{0.70\\textwidth}" .. left_content .. "\\end{minipage}"
+            .. "\\hfill"
+            .. "\\begin{minipage}[t]{0.28\\textwidth}\\raggedleft\\textit{" .. escape_latex(date_text) .. "}\\end{minipage}"
+            .. "\\par\\vspace{1pt}"
           table.insert(result, pandoc.RawBlock("latex", raw))
         else
           -- Entry without date

@@ -14,7 +14,7 @@ format:
       - bottom=1in
       - left=1in
       - right=1in
-    mainfont: "Times New Roman"
+    mainfont: "Libertinus Serif"
     fontsize: 12pt
     include-in-header: templates/cv-header.tex
     colorlinks: true

@@ -27,7 +27,7 @@ format:
 :::
 
 ::: {.cv-contact}
-[Stephenson Institute for Classical Liberalism]{.cv-left} [Phone: (+1) ***REMOVED***]{.cv-right}
+[Stephenson Institute for Classical Liberalism]{.cv-left} []{.cv-right}
 :::
 
 ::: {.cv-contact}
@@ -35,7 +35,7 @@ format:
 :::
 
 ::: {.cv-contact}
-[***REMOVED***]{.cv-left} [Personal Email: [nicholasjensen414@gmail.com](mailto:nicholasjensen414@gmail.com)]{.cv-right}
+[418 S Grant Ave, Crawfordsville, IN 47933]{.cv-left} [Personal Email: [nicholasjensen414@gmail.com](mailto:nicholasjensen414@gmail.com)]{.cv-right}
 :::
 
 ::: {.cv-contact}

@@ -134,6 +134,12 @@ Troy University, Economics Dept.
 ### Presentations
 
 ::: {.cv-entry}
+Southern Economic Association 96th Annual Meeting, Houston, TX
+
+[November 21-23, 2026]{.date}
+:::
+
+::: {.cv-entry}
 Public Choice Society Annual Conference, San Antonio, TX
 
 [March 14, 2026]{.date}
@@ -186,7 +192,7 @@ A Statewide Analysis of All Crime Offenses During COVID. Annual Conference for C
 ### Colloquia, Conferences and Workshops
 
 ::: {.cv-entry}
-2025 Seminar and Conference on Voluntary Governance (University of Buckingham)
+2025 Seminar and Conference on Voluntary Governance (University of Pittsburgh)
 
 [September 4-7, 2025]{.date}
 :::

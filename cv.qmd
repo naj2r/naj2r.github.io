@@ -108,7 +108,7 @@ Troy University, Economics Dept.
 
 ### Journal Articles
 
-- D'Andrea, F., Vaca Pereira Rocha, H., Jensen, N., Blizard, Z., & Melo, V. "Economic Freedom and Rent Seeking: Evidence from US States." *Public Choice*, (forthcoming).
+- D'Andrea, F. A. M. C., Vaca Pereira Rocha, H., Jensen, N., Blizard, Z., & Melo, V. (2026). "Economic Freedom and Rent Seeking: Evidence from US States." *Public Choice*. [doi: 10.1007/s11127-026-01386-6](https://doi.org/10.1007/s11127-026-01386-6)
 
 - Benzecry, G. F., Jensen, N., & Smith, D. J. (2025). "The Road to Serfdom and the Definitions of Socialism, Planning, and the Welfare State During the First Half of the 20th Century." *History of Political Economy*, 57(3), 441--475. [doi: 10.1215/00182702-11773500](https://doi.org/10.1215/00182702-11773500)
 
@@ -342,6 +342,8 @@ ECON 2252 Principles of Microeconomics
 :::
 
 ## Media Appearances
+
+- ["Surge in Gas Prices Strains East Tennessee Food Trucks."](https://www.wbir.com/video/money/business/small-business/surge-in-gas-prices-strains-east-tennessee-food-trucks/51-ef328fce-5f04-43a9-938e-2ad28b957694) *WBIR 10 News*, March 26, 2026.
 
 - ["Knoxville Ranks Low on Rent Affordability."](https://www.wate.com/news/top-stories/knoxville-ranks-low-on-rent-affordability/) *WATE 6 News*, April 22, 2025.
 

@@ -14,7 +14,7 @@ format:
       - bottom=1in
       - left=1in
       - right=1in
-    mainfont: "Times New Roman"
+    mainfont: "Libertinus Serif"
     fontsize: 12pt
     include-in-header: templates/cv-header.tex
     colorlinks: true
@@ -27,19 +27,15 @@ format:
 :::
 
 ::: {.cv-contact}
-[Stephenson Institute for Classical Liberalism]{.cv-left} [Phone: (+1) 205-362-0487]{.cv-right}
+[Stephenson Institute for Classical Liberalism]{.cv-left} [Institutional Email: [jensenn@wabash.edu](mailto:jensenn@wabash.edu)]{.cv-right}
 :::
 
 ::: {.cv-contact}
-[Wabash College]{.cv-left} [Institutional Email: [jensenn@wabash.edu](mailto:jensenn@wabash.edu)]{.cv-right}
+[Wabash College]{.cv-left} [Personal Email: [nicholasjensen414@gmail.com](mailto:nicholasjensen414@gmail.com)]{.cv-right}
 :::
 
 ::: {.cv-contact}
-[5825 Sunset Way Apt 2312, Whitestown, IN 46075]{.cv-left} [Personal Email: [nicholasjensen414@gmail.com](mailto:nicholasjensen414@gmail.com)]{.cv-right}
-:::
-
-::: {.cv-contact}
-[]{.cv-left} [Website: [nicholas-jensen.com](https://nicholas-jensen.com/)]{.cv-right}
+[418 S Grant Ave, Crawfordsville, IN 47933]{.cv-left} [Website: [nicholas-jensen.com](https://nicholas-jensen.com/)]{.cv-right}
 :::
 
 ::: {.cv-contact}
@@ -138,6 +134,30 @@ Troy University, Economics Dept.
 ### Presentations
 
 ::: {.cv-entry}
+Southern Economic Association 96th Annual Meeting, Houston, TX
+
+[November 21-23, 2026]{.date}
+:::
+
+::: {.cv-entry}
+Public Choice Society Annual Conference, San Antonio, TX
+
+[March 14, 2026]{.date}
+:::
+
+::: {.cv-entry}
+Southern Economic Association 95th Annual Meeting, Tampa, FL
+
+[November 22-24, 2025]{.date}
+:::
+
+::: {.cv-entry}
+Public Choice Society Annual Conference, Louisville, KY
+
+[March 6-8, 2025]{.date}
+:::
+
+::: {.cv-entry}
 Southern Economic Association Annual Conference, Washington, D.C.
 
 [November 22-25, 2024]{.date}
@@ -172,7 +192,7 @@ A Statewide Analysis of All Crime Offenses During COVID. Annual Conference for C
 ### Colloquia, Conferences and Workshops
 
 ::: {.cv-entry}
-2025 Seminar and Conference on Voluntary Governance (University of Buckingham)
+2025 Seminar and Conference on Voluntary Governance (University of Pittsburgh)
 
 [September 4-7, 2025]{.date}
 :::

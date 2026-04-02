@@ -106,10 +106,47 @@ h3 {
   color: #444;
 }
 
-// Contact info row
+// Contact info row — Pandoc wraps content in a <p> inside the div,
+// so the <p> must be the flex container, not the outer div.
 .cv-contact {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
   margin-bottom: 0.1rem;
+
+  p {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 0;
+  }
+
+  .cv-left {
+    flex: 1 1 50%;
+    min-width: 0;
+  }
+
+  .cv-right {
+    flex: 0 1 auto;
+    text-align: right;
+    color: #555;
+    overflow-wrap: break-word;
+  }
+}
+
+// On narrow screens, stack contact rows vertically
+@media (max-width: 576px) {
+  .cv-contact p {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  .cv-contact .cv-right {
+    text-align: left;
+  }
+
+  .cv-entry {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
 }

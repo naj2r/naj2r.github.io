@@ -1,0 +1,41 @@
+# Publishing manifest for website-materials
+#
+# One entry per published PDF. This file is the lookup table when updating
+# the CV and website: it maps a paper to the permanent Dropbox share URL
+# that should appear in cv.qmd / research/index.qmd.
+#
+# Field rules:
+#   paper       - human label. Free text, safe to edit anytime.
+#   filename    - PERMANENT. Renaming a published file deletes the old object
+#                 and creates a new one, which silently kills the share link.
+#   share_url   - created BY HAND in Dropbox after the file's first upload.
+#                 publish.ps1 NEVER writes this field.
+#   last_pushed - written by publish.ps1 after each successful transfer.
+#
+# Adding a paper: drop the PDF into the publish folder under its canonical
+# name and run publish.ps1. It appends a stub entry here and tells you that
+# a share link still needs creating.
+#
+# Naming convention: permanent, venue-free, date-free, version-free.
+#   good: jensen-absinthe.pdf
+#   bad:  jensen-absinthe-jpe-r2-2026-09.pdf
+
+- paper: Regulatory Rollback and the Smoking Tailpipe (emissions testing repeal)
+  filename: jensen-emissions.pdf
+  share_url: ""
+  last_pushed: ""
+
+- paper: Who Killed the Green Fairy? (Swiss absinthe ban of 1908)
+  filename: jensen-absinthe.pdf
+  share_url: ""
+  last_pushed: ""
+
+- paper: The Effects of Prosecutor Turnover on Criminal Case Outcomes
+  filename: jensen-prosecutor-turnover.pdf
+  share_url: ""
+  last_pushed: ""
+
+- paper: Curriculum Vitae
+  filename: jensen-cv.pdf
+  share_url: ""
+  last_pushed: ""

@@ -28,7 +28,7 @@
     Local source folder. Default: %USERPROFILE%\website-materials
 
 .PARAMETER Remote
-    rclone remote and path. Default: dropbox:website-materials
+    rclone remote and path. Default: dropbox:Published/website-materials
 
 .PARAMETER DryRun
     Show what would transfer without uploading anything.
@@ -46,7 +46,7 @@
 param(
     [string] $File,
     [string] $PublishFolder = (Join-Path $env:USERPROFILE 'website-materials'),
-    [string] $Remote        = 'dropbox:website-materials',
+    [string] $Remote        = 'dropbox:Published/website-materials',
     [string] $Manifest      = (Join-Path $PSScriptRoot 'manifest.yml'),
     [switch] $DryRun
 )
@@ -222,12 +222,17 @@ function Set-ManifestLastPushed {
 function Add-ManifestStub {
     param([string] $Path, [string] $Filename, [string] $Stamp)
 
+    # The last element MUST stay parenthesized. In PowerShell "," binds looser
+    # than "+", so an unparenthesized '...' + $Stamp + '"' inside a comma list
+    # is parsed as (array) + $Stamp + '"' - appending two extra elements rather
+    # than concatenating - and Add-Content then writes each on its own line,
+    # splitting the timestamp across three lines of YAML.
     $stub = @(
         '',
         '- paper: TODO - describe this paper',
         "  filename: $Filename",
         '  share_url: ""',
-        '  last_pushed: "' + $Stamp + '"'
+        ('  last_pushed: "{0}"' -f $Stamp)
     )
     Add-Content -Path $Path -Value $stub -Encoding UTF8
 }

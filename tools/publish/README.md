@@ -30,7 +30,14 @@ matter. Only the remote path and the overwrite mode do.
 | Path | What |
 |---|---|
 | `C:\Users\<you>\website-materials\` | local publish folder. **Outside** the Dropbox-synced tree, on purpose |
-| `dropbox:website-materials/` | remote folder. Publishable PDFs only — it is effectively public |
+| `dropbox:Published/website-materials/` | remote folder. Publishable PDFs only — it is effectively public |
+
+The remote lives under a dedicated `Published/` parent rather than at the
+Dropbox root. `Published/` holds nothing else, so there is no personal folder
+adjacent to the one whose contents get share links — a misplaced file lands
+somewhere harmless instead of one right-click away from being world-readable.
+Note that moving this folder after share links exist would break every one of
+them, so it is fixed now.
 | `manifest.yml` | paper -> filename -> share URL lookup table |
 | `publish.ps1` | push everything (or one file) |
 | `stage.ps1` | copy an arbitrary PDF in under its canonical name |

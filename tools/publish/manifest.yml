@@ -1,4 +1,4 @@
-# Publishing manifest for website-materials
+﻿# Publishing manifest for website-materials
 #
 # One entry per published PDF. This file is the lookup table when updating
 # the CV and website: it maps a paper to the permanent Dropbox share URL
@@ -39,3 +39,8 @@
   filename: jensen-cv.pdf
   share_url: ""
   last_pushed: ""
+
+- paper: TODO - describe this paper
+  filename: linktest.pdf
+  share_url: ""
+  last_pushed: "2026-09-15T05:38:25Z"

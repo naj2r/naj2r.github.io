@@ -22,8 +22,10 @@
 
 - paper: Regulatory Rollback and the Smoking Tailpipe (emissions testing repeal)
   filename: jensen-emissions.pdf
-  share_url: ""
-  last_pushed: ""
+  # raw=1 serves the PDF inline; the ephemeral st= token Dropbox appends is
+  # dropped deliberately, since it expires and would break the link later.
+  share_url: "https://www.dropbox.com/scl/fi/t2cq95ilvsbyczac5r7pm/jensen-emissions.pdf?rlkey=k4n6yobakkxj68808s2ie09n7&raw=1"
+  last_pushed: "2026-09-15T06:19:59Z"
 
 - paper: Who Killed the Green Fairy? (Swiss absinthe ban of 1908)
   filename: jensen-absinthe.pdf

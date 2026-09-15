@@ -126,6 +126,8 @@ Troy University, Economics Dept.
 
 - "The Effects of Prosecutor Turnover on Criminal Case Outcomes"
 - "Electoral Pressure and the Shadow of Trial: Prosecutors and Jury Mobilization" (with Joshua Ammons)
+- "Bright Lines and Bunching: How Regulatory Credit Design Shapes Clean Vehicle Technology" (with Patricia J. Hummel)
+- "Who Killed the Green Fairy? Temperance, Language, and Wine in the Swiss Absinthe Ban of 1908" (with Jacob Smith)
 
 <!-- ### Works in Progress -->
 
@@ -134,7 +136,7 @@ Troy University, Economics Dept.
 ### Presentations
 
 ::: {.cv-entry}
-Southern Economic Association 96th Annual Meeting, Houston, TX
+Southern Economic Association 96th Annual Meeting, Houston, TX (scheduled)
 
 [November 21-23, 2026]{.date}
 :::

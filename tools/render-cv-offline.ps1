@@ -1,61 +1,65 @@
 <#
 .SYNOPSIS
-    Build the on-disk CV pair - public and with-references, each as .pdf and .tex.
+    Build the on-disk CVs: the public CV, and one CV with references per
+    third-reference alternate - each as .pdf and .tex.
 
 .DESCRIPTION
-    Every build writes four files:
+    Referee files live in <JobMarketDir>\CV-private\:
 
-      <JobMarketDir>\CV-snapshots\CV-Jensen_<date>.pdf                  public CV
-      <JobMarketDir>\CV-snapshots\CV-Jensen_<date>.tex
-      <JobMarketDir>\CV-private\CV-Jensen-with-references_<date>.pdf    sent with applications
-      <JobMarketDir>\CV-private\CV-Jensen-with-references_<date>.tex
+      references.md        referees on every application, in the order listed
+      third-reference\     one .md per alternate for the third slot
 
-    Both variants are rendered from the same snapshot of cv.qmd in the same
-    run, so they are identical except for the References section.
+    Every build writes:
 
-    The with-references variant can never live in the repo: naj2r.github.io is
-    PUBLIC on GitHub, so referee contact details written into cv.qmd would be
-    published. Referees live in a private file outside the repo. This script
-    splices that file into a scratch copy of cv.qmd between the
+      CV-snapshots\CV-Jensen_<date>.pdf/.tex                              public
+      CV-private\CV-Jensen-with-references-<Alternate>_<date>.pdf/.tex    one per alternate
+
+    With third-reference\ empty, a single CV-Jensen-with-references_<date>
+    pair is built from references.md alone.
+
+    All variants render from the same snapshot of cv.qmd in one run, so they
+    differ only in the References section. The public pair is saved first, so
+    a problem in a referee file never stops the public CV from being current.
+
+    Referee details can never live in the repo: naj2r.github.io is PUBLIC on
+    GitHub. This script splices them into a scratch copy of cv.qmd between the
     offline-references markers, renders, verifies, saves, and deletes the
-    scratch copy - even when the build fails.
+    scratch copy - even when a render fails.
+
+    Referee files hold paragraphs only; the build wraps them in the
+    cv-referees grid. A line containing TODO (outside HTML comments) blocks
+    that CV, so a half-filled entry never reaches an application: a TODO in
+    references.md blocks every with-references CV, a TODO in an alternate
+    blocks only that alternate's CV.
 
     The .tex files are the exact sources LuaLaTeX compiled, with the header
-    template inlined, so each compiles on its own in an empty folder. They need
-    LuaLaTeX or XeLaTeX, because the CV uses fontspec with Libertinus Serif.
+    template inlined, so each compiles alone in an empty folder. They need
+    LuaLaTeX or XeLaTeX (fontspec with Libertinus Serif).
 
     Rendering happens in a short, dot-free scratch path outside Dropbox: Quarto
-    cannot find its inputs from a path containing a dot-directory (worktrees
-    live under .claude\), and the Dropbox client can lock files mid-render.
+    cannot find its inputs under a dot-directory (worktrees live under
+    .claude\), and the Dropbox client can lock files mid-render.
 
 .PARAMETER JobMarketDir
-    Folder that holds CV-private\ and CV-snapshots\. Point this at the new
-    folder each job market cycle.
-
-.PARAMETER ReferencesFile
-    Private Quarto-markdown file with the referee entries.
-    Default: <JobMarketDir>\CV-private\references.md
+    Folder holding CV-private\ and CV-snapshots\. Point it at the new folder
+    each job market cycle.
 
 .PARAMETER Stamp
-    Date string used in the filenames. Default: today as M-d-yy (9-17-26), the
-    convention CV-snapshots already uses. Dated names mean a copy already sent
-    to a committee is never overwritten by a build on a later day.
+    Date string for filenames. Default: today as M-d-yy (9-17-26). Dated names
+    mean a copy already sent to a committee is never overwritten by a build on
+    a later day.
 
 .EXAMPLE
     .\tools\render-cv-offline.ps1
-
-.EXAMPLE
-    .\tools\render-cv-offline.ps1 -JobMarketDir "$env:USERPROFILE\Dropbox\Job Market Materials\Job Market 2027"
 #>
 [CmdletBinding()]
 param(
-    [string] $JobMarketDir   = (Join-Path $env:USERPROFILE 'Dropbox\Job Market Materials\Job Market 2026'),
-    [string] $PrivateDir     = '',
-    [string] $PublicDir      = '',
-    [string] $ReferencesFile = '',
-    [string] $Stamp          = (Get-Date).ToString('M-d-yy'),
-    [string] $RepoRoot       = (Split-Path $PSScriptRoot -Parent),
-    [string] $WorkDir        = (Join-Path $env:TEMP 'qr-naj2r-offline')
+    [string] $JobMarketDir = (Join-Path $env:USERPROFILE 'Dropbox\Job Market Materials\Job Market 2026'),
+    [string] $PrivateDir   = '',
+    [string] $PublicDir    = '',
+    [string] $Stamp        = (Get-Date).ToString('M-d-yy'),
+    [string] $RepoRoot     = (Split-Path $PSScriptRoot -Parent),
+    [string] $WorkDir      = (Join-Path $env:TEMP 'qr-naj2r-offline')
 )
 
 $ErrorActionPreference = 'Stop'
@@ -80,6 +84,30 @@ function Resolve-PdfToText {
     return $null
 }
 
+function Get-Emails {
+    param([string] $Text)
+    return @([regex]::Matches($Text, '[\w.+-]+@[\w-]+\.[\w.-]+') | ForEach-Object { $_.Value } | Sort-Object -Unique)
+}
+
+# Read a referee file. HTML comments carry instructions and may mention TODO
+# or fences freely, so they are stripped before anything is checked.
+function Read-RefereeFile {
+    param([string] $Path)
+    $raw  = [System.IO.File]::ReadAllText($Path, [System.Text.Encoding]::UTF8)
+    $body = ([regex]::Replace($raw, '(?s)<!--.*?-->', '')).Trim()
+    $problems = @()
+    if (-not $body)                    { $problems += 'is empty' }
+    if ($body -match '(?m)^\s*:::')    { $problems += 'contains ::: fences (referee files hold paragraphs only; the build adds the grid)' }
+    if ($body -match '(?i)\bTODO\b')   { $problems += 'has unfilled TODO placeholders' }
+    return [pscustomobject]@{
+        Path     = $Path
+        Name     = [System.IO.Path]::GetFileNameWithoutExtension($Path)
+        Body     = $body
+        Emails   = @(Get-Emails $body)
+        Problems = $problems
+    }
+}
+
 # Render cv.qmd in $Dir to PDF, keeping the .tex. Returns $true on success.
 function Invoke-CvRender {
     param([string] $Dir)
@@ -98,9 +126,7 @@ function Invoke-CvRender {
         Pop-Location
     }
 
-    $pdf = Join-Path $Dir 'docs\cv.pdf'
-    $tex = Join-Path $Dir 'cv.tex'
-    if ($rc -ne 0 -or -not (Test-Path $pdf) -or -not (Test-Path $tex)) {
+    if ($rc -ne 0 -or -not (Test-Path (Join-Path $Dir 'docs\cv.pdf')) -or -not (Test-Path (Join-Path $Dir 'cv.tex'))) {
         Write-Err "quarto render failed (exit $rc)."
         $log = Join-Path $Dir 'render.log'
         if (Test-Path $log) {
@@ -111,20 +137,25 @@ function Invoke-CvRender {
     return $true
 }
 
+function Save-Pair {
+    param([string] $Dir, [string] $PdfDest, [string] $TexDest)
+    foreach ($d in @((Split-Path $PdfDest -Parent), (Split-Path $TexDest -Parent))) {
+        if (-not (Test-Path $d)) { New-Item -ItemType Directory -Path $d -Force | Out-Null }
+    }
+    Copy-Item (Join-Path $Dir 'docs\cv.pdf') $PdfDest -Force
+    Copy-Item (Join-Path $Dir 'cv.tex')      $TexDest -Force
+    Write-Ok ('saved {0}  ({1:N0} KB)' -f (Split-Path $PdfDest -Leaf), ((Get-Item $PdfDest).Length / 1KB))
+    Write-Ok ('saved {0}  ({1:N0} KB)' -f (Split-Path $TexDest -Leaf), ((Get-Item $TexDest).Length / 1KB))
+}
+
 $StartMarker = '<!-- offline-references:start'
 $EndMarker   = '<!-- offline-references:end -->'
 $Utf8NoBom   = New-Object System.Text.UTF8Encoding($false)
 
-if (-not $PrivateDir)     { $PrivateDir     = Join-Path $JobMarketDir 'CV-private' }
-if (-not $PublicDir)      { $PublicDir      = Join-Path $JobMarketDir 'CV-snapshots' }
-if (-not $ReferencesFile) { $ReferencesFile = Join-Path $PrivateDir 'references.md' }
-
-$Out = [ordered]@{
-    PublicPdf = Join-Path $PublicDir  ('CV-Jensen_{0}.pdf' -f $Stamp)
-    PublicTex = Join-Path $PublicDir  ('CV-Jensen_{0}.tex' -f $Stamp)
-    RefsPdf   = Join-Path $PrivateDir ('CV-Jensen-with-references_{0}.pdf' -f $Stamp)
-    RefsTex   = Join-Path $PrivateDir ('CV-Jensen-with-references_{0}.tex' -f $Stamp)
-}
+if (-not $PrivateDir) { $PrivateDir = Join-Path $JobMarketDir 'CV-private' }
+if (-not $PublicDir)  { $PublicDir  = Join-Path $JobMarketDir 'CV-snapshots' }
+$ReferencesFile = Join-Path $PrivateDir 'references.md'
+$ThirdDir       = Join-Path $PrivateDir 'third-reference'
 
 # ===========================================================================
 # 1. Preflight
@@ -146,15 +177,40 @@ Write-Ok "repo: $RepoRoot"
 
 if (-not (Test-Path $ReferencesFile)) {
     Write-Err "Private references file not found: $ReferencesFile"
-    Write-Host '  Each job market cycle, point -JobMarketDir at the new folder, or create'
-    Write-Host '  references.md there from the previous cycle''s copy.'
+    Write-Host '  Each job market cycle, point -JobMarketDir at the new folder and carry'
+    Write-Host '  CV-private\ (references.md and third-reference\) over from the last cycle.'
     exit 1
 }
-Write-Ok "references: $ReferencesFile"
 
-# Collect every root that belongs to the public repo. From a worktree,
-# RepoRoot is the worktree; the main checkout is the parent of git's common
-# directory. Neither may hold private material.
+$fixed = Read-RefereeFile $ReferencesFile
+$alternates = @()
+if (Test-Path $ThirdDir) {
+    $alternates = @(Get-ChildItem $ThirdDir -Filter *.md -File | Sort-Object Name | ForEach-Object { Read-RefereeFile $_.FullName })
+}
+Write-Ok "fixed referees: $ReferencesFile"
+Write-Ok ("third-slot alternates: {0}" -f $(if ($alternates.Count) { ($alternates | ForEach-Object { $_.Name }) -join ', ' } else { 'none' }))
+
+# One variant per alternate; with no alternates, one variant of the fixed list.
+$variants = @()
+if ($alternates.Count -eq 0) {
+    $variants += [pscustomobject]@{ Label = ''; Parts = @($fixed) }
+} else {
+    foreach ($a in $alternates) {
+        $label = $a.Name -replace '[^A-Za-z0-9-]', ''
+        $variants += [pscustomobject]@{ Label = $label; Parts = @($fixed, $a) }
+    }
+}
+foreach ($v in $variants) {
+    $base = if ($v.Label) { 'CV-Jensen-with-references-{0}_{1}' -f $v.Label, $Stamp } else { 'CV-Jensen-with-references_{0}' -f $Stamp }
+    $v | Add-Member -NotePropertyName Pdf -NotePropertyValue (Join-Path $PrivateDir "$base.pdf")
+    $v | Add-Member -NotePropertyName Tex -NotePropertyValue (Join-Path $PrivateDir "$base.tex")
+}
+
+$publicPdf = Join-Path $PublicDir ('CV-Jensen_{0}.pdf' -f $Stamp)
+$publicTex = Join-Path $PublicDir ('CV-Jensen_{0}.tex' -f $Stamp)
+
+# Every root belonging to the public repo. From a worktree, RepoRoot is the
+# worktree; the main checkout is the parent of git's common directory.
 $publicRoots = @($RepoRoot)
 $prevEap = $ErrorActionPreference
 $ErrorActionPreference = 'Continue'
@@ -167,9 +223,9 @@ if ($gitExit -eq 0 -and $common) {
     $publicRoots += (Split-Path ([System.IO.Path]::GetFullPath($common)) -Parent)
 }
 
-$private = @($ReferencesFile, $Out.RefsPdf, $Out.RefsTex)
+$privatePaths = @($ReferencesFile, $ThirdDir) + @($variants | ForEach-Object { $_.Pdf, $_.Tex })
 foreach ($root in $publicRoots) {
-    foreach ($p in $private) {
+    foreach ($p in $privatePaths) {
         if (Test-PathInside $p $root) {
             Write-Err 'REFUSING: private CV material would sit inside the public repo.'
             Write-Host "  $p is under $root, which is published on GitHub."
@@ -178,10 +234,10 @@ foreach ($root in $publicRoots) {
     }
 }
 
-# Everything in the publish staging folder gets pushed to a shared Dropbox
-# folder whose files carry public links. No CV output belongs there.
+# The publish staging folder is pushed to a shared Dropbox folder with public
+# links. No CV output belongs there.
 $stagingFolder = Join-Path $env:USERPROFILE 'website-materials'
-foreach ($p in $Out.Values) {
+foreach ($p in @($publicPdf, $publicTex) + @($variants | ForEach-Object { $_.Pdf, $_.Tex })) {
     if (Test-PathInside $p $stagingFolder) {
         Write-Err 'REFUSING: a CV output would land in the publish staging folder.'
         Write-Host "  Everything in $stagingFolder is pushed to a public Dropbox share."
@@ -200,7 +256,6 @@ if ($WorkDir -match '(?i)\\Dropbox\\') {
     exit 1
 }
 
-# Markers: exactly one of each, in order.
 $src = [System.IO.File]::ReadAllText($cvPath, [System.Text.Encoding]::UTF8)
 $nStart = ([regex]::Matches($src, [regex]::Escape($StartMarker))).Count
 $nEnd   = ([regex]::Matches($src, [regex]::Escape($EndMarker))).Count
@@ -211,16 +266,11 @@ if ($nStart -ne 1 -or $nEnd -ne 1 -or $ei -lt $si) {
     Write-Host "  found start=$nStart end=$nEnd"
     exit 1
 }
+$startClose = $src.IndexOf('-->', $si)
 Write-Ok 'offline-references markers found in cv.qmd'
 
-$refs = [System.IO.File]::ReadAllText($ReferencesFile, [System.Text.Encoding]::UTF8)
-$refEmails = @([regex]::Matches($refs, '[\w.+-]+@[\w-]+\.[\w.-]+') | ForEach-Object { $_.Value } | Sort-Object -Unique)
-if ($refEmails.Count -eq 0) {
-    Write-Warn 'No email addresses found in the references file - verification will be limited.'
-}
-
-$startClose = $src.IndexOf('-->', $si)
-$spliced = $src.Substring(0, $startClose + 3) + "`n`n" + $refs.Trim() + "`n`n" + $src.Substring($ei)
+# Every address in every referee file - the public CV must contain none.
+$allRefereeEmails = @((@($fixed) + $alternates) | ForEach-Object { $_.Emails } | Sort-Object -Unique)
 
 $pdfToText = Resolve-PdfToText
 if (-not $pdfToText) {
@@ -228,15 +278,19 @@ if (-not $pdfToText) {
 }
 
 # ===========================================================================
-# 2. Scratch copy, two renders, verification
+# 2. Scratch copy, renders, verification
 #    Private details exist only inside WorkDir, which is always deleted.
 # ===========================================================================
 $exitCode = 0
+$saved    = New-Object System.Collections.Generic.List[string]
+$blocked  = New-Object System.Collections.Generic.List[string]
 try {
     # do/while($false) gives the body a structured early exit. `break` leaves
     # the block and falls through to the exit handling below. `return` would
     # NOT work here: at script scope it exits the whole script, skipping the
     # final `exit $exitCode`, so a failed build would report success.
+    # Inside the per-variant foreach, use `continue`: `break` there would only
+    # leave the foreach.
     do {
         Write-Section 'Staging (scratch copy; removed at the end)'
 
@@ -248,24 +302,21 @@ try {
         Get-ChildItem $RepoRoot -Force |
             Where-Object { -not ($_.PSIsContainer -and ($_.Name.StartsWith('.') -or $_.Name -eq 'docs')) } |
             ForEach-Object { Copy-Item $_.FullName -Destination $WorkDir -Recurse -Force }
-
-        $held = Join-Path $WorkDir '_built'
-        New-Item -ItemType Directory -Path $held -Force | Out-Null
         Write-Ok 'project copied'
 
         # ------------------------------------------------------------------
-        # Variant 1: public (cv.qmd exactly as committed)
+        # Public CV - saved first, so referee problems never block it
         # ------------------------------------------------------------------
-        Write-Section 'Render 1 of 2: public CV'
+        Write-Section 'Public CV'
 
         if (-not @(Invoke-CvRender -Dir $WorkDir)[-1]) { $exitCode = 1; break }
 
         $pubTex = [System.IO.File]::ReadAllText((Join-Path $WorkDir 'cv.tex'), [System.Text.Encoding]::UTF8)
-        $leaked = @($refEmails | Where-Object { $pubTex.IndexOf($_, [System.StringComparison]::OrdinalIgnoreCase) -ge 0 })
+        $leaked = @($allRefereeEmails | Where-Object { $pubTex.IndexOf($_, [System.StringComparison]::OrdinalIgnoreCase) -ge 0 })
         if ($pdfToText) {
-            $pubPdfText = (& $pdfToText -layout (Join-Path $WorkDir 'docs\cv.pdf') - | Out-String)
-            $leaked += @($refEmails | Where-Object { $pubPdfText.IndexOf($_, [System.StringComparison]::OrdinalIgnoreCase) -ge 0 })
-            if ($pubPdfText -notmatch '(?i)available upon request') {
+            $pubText = (& $pdfToText -layout (Join-Path $WorkDir 'docs\cv.pdf') - | Out-String)
+            $leaked += @($allRefereeEmails | Where-Object { $pubText.IndexOf($_, [System.StringComparison]::OrdinalIgnoreCase) -ge 0 })
+            if ($pubText -notmatch '(?i)available upon request') {
                 Write-Err 'The public CV no longer says "Available upon request". Check cv.qmd between the markers.'
                 $exitCode = 1; break
             }
@@ -274,54 +325,66 @@ try {
             Write-Err 'A referee email address appears in the PUBLIC CV. Something is written into cv.qmd that must not be.'
             $exitCode = 1; break
         }
-        Move-Item (Join-Path $WorkDir 'docs\cv.pdf') (Join-Path $held 'public.pdf')
-        Move-Item (Join-Path $WorkDir 'cv.tex')      (Join-Path $held 'public.tex')
-        Write-Ok 'rendered; no referee details present'
+        Write-Ok "no referee details present (checked $($allRefereeEmails.Count) address(es) across all referee files)"
+        Save-Pair -Dir $WorkDir -PdfDest $publicPdf -TexDest $publicTex
+        $saved.Add($publicPdf); $saved.Add($publicTex)
 
         # ------------------------------------------------------------------
-        # Variant 2: with references spliced in
+        # CVs with references
         # ------------------------------------------------------------------
-        Write-Section 'Render 2 of 2: CV with references'
-
-        [System.IO.File]::WriteAllText((Join-Path $WorkDir 'cv.qmd'), $spliced, $Utf8NoBom)
-        if (-not @(Invoke-CvRender -Dir $WorkDir)[-1]) { $exitCode = 1; break }
-
-        $refTex = [System.IO.File]::ReadAllText((Join-Path $WorkDir 'cv.tex'), [System.Text.Encoding]::UTF8)
-        $missing = @($refEmails | Where-Object { $refTex.IndexOf($_, [System.StringComparison]::OrdinalIgnoreCase) -lt 0 })
-        if ($pdfToText) {
-            $refPdfText = (& $pdfToText -layout (Join-Path $WorkDir 'docs\cv.pdf') - | Out-String)
-            $missing += @($refEmails | Where-Object { $refPdfText.IndexOf($_, [System.StringComparison]::OrdinalIgnoreCase) -lt 0 })
-            if ($refPdfText -match '(?i)available upon request') {
-                Write-Err 'The CV with references still says "Available upon request" - the swap did not take effect.'
-                $exitCode = 1; break
-            }
-        }
-        $missing = @($missing | Sort-Object -Unique)
-        if ($missing.Count -gt 0) {
-            Write-Err "$($missing.Count) referee email(s) did not make it into the CV:"
-            foreach ($m in $missing) { Write-Host "    $m" }
+        if ($fixed.Problems.Count -gt 0) {
+            Write-Section 'CVs with references: BLOCKED'
+            Write-Err "references.md $($fixed.Problems -join '; ')."
+            Write-Host '  It is on every application, so no CV with references was built.'
+            $blocked.Add('all CVs with references (references.md)')
             $exitCode = 1; break
         }
-        Move-Item (Join-Path $WorkDir 'docs\cv.pdf') (Join-Path $held 'refs.pdf')
-        Move-Item (Join-Path $WorkDir 'cv.tex')      (Join-Path $held 'refs.tex')
-        Write-Ok "rendered; all $($refEmails.Count) referee email(s) present"
 
-        # ------------------------------------------------------------------
-        # Save all four
-        # ------------------------------------------------------------------
-        Write-Section 'Save'
+        foreach ($v in $variants) {
+            $title = if ($v.Label) { "CV with references (third slot: $($v.Label))" } else { 'CV with references' }
+            Write-Section $title
 
-        foreach ($dir in @($PublicDir, $PrivateDir)) {
-            if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
+            $alt = if ($v.Label) { $v.Parts[-1] } else { $null }
+            if ($alt -and $alt.Problems.Count -gt 0) {
+                Write-Err "third-reference\$($alt.Name).md $($alt.Problems -join '; ')."
+                Write-Host '  Skipped this CV; the others still build.'
+                $blocked.Add($title)
+                continue
+            }
+
+            $grid = "::: {.cv-referees}`n`n" + (($v.Parts | ForEach-Object { $_.Body }) -join "`n`n") + "`n`n:::"
+            $spliced = $src.Substring(0, $startClose + 3) + "`n`n" + $grid + "`n`n" + $src.Substring($ei)
+            [System.IO.File]::WriteAllText((Join-Path $WorkDir 'cv.qmd'), $spliced, $Utf8NoBom)
+
+            if (-not @(Invoke-CvRender -Dir $WorkDir)[-1]) { $blocked.Add($title); continue }
+
+            $want = @($v.Parts | ForEach-Object { $_.Emails } | Sort-Object -Unique)
+            if ($want.Count -eq 0) { Write-Warn 'No email addresses in these referee entries - verification is limited.' }
+
+            $tex = [System.IO.File]::ReadAllText((Join-Path $WorkDir 'cv.tex'), [System.Text.Encoding]::UTF8)
+            $missing = @($want | Where-Object { $tex.IndexOf($_, [System.StringComparison]::OrdinalIgnoreCase) -lt 0 })
+            $stillUpon = $false
+            if ($pdfToText) {
+                $text = (& $pdfToText -layout (Join-Path $WorkDir 'docs\cv.pdf') - | Out-String)
+                $missing += @($want | Where-Object { $text.IndexOf($_, [System.StringComparison]::OrdinalIgnoreCase) -lt 0 })
+                $stillUpon = ($text -match '(?i)available upon request')
+            }
+            $missing = @($missing | Sort-Object -Unique)
+            if ($stillUpon) {
+                Write-Err 'Still says "Available upon request" - the swap did not take effect.'
+                $blocked.Add($title); continue
+            }
+            if ($missing.Count -gt 0) {
+                Write-Err "$($missing.Count) referee email(s) did not make it into the CV:"
+                foreach ($m in $missing) { Write-Host "    $m" }
+                $blocked.Add($title); continue
+            }
+            Write-Ok "all $($want.Count) referee email(s) present"
+            Save-Pair -Dir $WorkDir -PdfDest $v.Pdf -TexDest $v.Tex
+            $saved.Add($v.Pdf); $saved.Add($v.Tex)
         }
-        Copy-Item (Join-Path $held 'public.pdf') $Out.PublicPdf -Force
-        Copy-Item (Join-Path $held 'public.tex') $Out.PublicTex -Force
-        Copy-Item (Join-Path $held 'refs.pdf')   $Out.RefsPdf   -Force
-        Copy-Item (Join-Path $held 'refs.tex')   $Out.RefsTex   -Force
 
-        foreach ($p in $Out.Values) {
-            Write-Ok ('{0}  ({1:N0} KB)' -f $p, ((Get-Item $p).Length / 1KB))
-        }
+        if ($blocked.Count -gt 0) { $exitCode = 1 }
     } while ($false)
 }
 finally {
@@ -335,11 +398,18 @@ finally {
     }
 }
 
+Write-Section 'Summary'
+Write-Host "  saved $($saved.Count) file(s)"
+if ($blocked.Count -gt 0) {
+    Write-Host '  not built:' -ForegroundColor Yellow
+    foreach ($b in $blocked) { Write-Host "    $b" -ForegroundColor Yellow }
+}
+if ($saved | Where-Object { $_ -like '*with-references*' }) {
+    Write-Host ''
+    Write-Host '  CVs with references contain referees'' contact details. Send them with' -ForegroundColor Yellow
+    Write-Host '  applications; never stage them for publishing (publish.ps1 refuses them).' -ForegroundColor Yellow
+}
+
 if ($exitCode -ne 0) { exit $exitCode }
-
-Write-Host ''
-Write-Host '  The with-references files contain referees'' contact details. Send them with' -ForegroundColor Yellow
-Write-Host '  applications; never stage them for publishing (publish.ps1 refuses them).' -ForegroundColor Yellow
-
 # Explicit: a native command above may have left a non-zero $LASTEXITCODE.
 exit 0

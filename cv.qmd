@@ -355,4 +355,10 @@ ECON 2252 Principles of Microeconomics
 
 ## References
 
+<!-- offline-references:start  Referee contact details never go in this file: the repo is public.
+     tools/render-cv-offline.ps1 swaps this block for a private references file when building
+     the CV you send with applications. Keep both markers. -->
+
 *Available upon request.*
+
+<!-- offline-references:end -->

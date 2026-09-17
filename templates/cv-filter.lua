@@ -158,6 +158,49 @@ function Div(el)
     end
   end
 
+  -- cv-referees: referee blocks in a two-column grid.
+  --
+  -- Only the private offline CV uses this (tools/render-cv-offline.ps1 splices
+  -- the referees in from a file outside the repo); the public cv.qmd never
+  -- holds referee contact details. Each paragraph inside the div is one
+  -- referee.
+  --
+  -- Deliberately NOT Quarto's layout-ncol: in PDF output that becomes a figure
+  -- float, which detaches from the "References" heading and gets parked
+  -- vertically centered on a float page of its own. Plain minipage rows (the
+  -- same idiom as cv-entry) are not floats, so the heading stays with the
+  -- first row, and [t] alignment keeps each row's tops level.
+  --
+  -- Rows are joined with \nopagebreak so the heading and the whole grid move
+  -- as one unit; a referee list split across pages, with one row stranded on
+  -- an otherwise empty final page, reads as a layout accident. Columns are
+  -- 0.46\linewidth so a long title line keeps a visible gutter instead of
+  -- appearing to run into the neighbouring column.
+  if el.classes:includes("cv-referees") then
+    if FORMAT:match("latex") or FORMAT:match("pdf") then
+      local cells = {}
+      for _, block in ipairs(el.content) do
+        if block.t == "Para" or block.t == "Plain" or block.t == "LineBlock" then
+          local tex = pandoc.write(pandoc.Pandoc({block}), "latex")
+          table.insert(cells,
+            "\\begin{minipage}[t]{0.46\\linewidth}\\raggedright\n" .. tex .. "\\end{minipage}")
+        end
+      end
+      local rows = {}
+      for i = 1, #cells, 2 do
+        local row = "\\noindent" .. cells[i]
+        if cells[i + 1] then
+          row = row .. "\\hfill" .. cells[i + 1]
+        end
+        table.insert(rows, row .. "\\par")
+      end
+      return pandoc.RawBlock("latex",
+        table.concat(rows, "\n\\nopagebreak\\vspace{0.9em}\\nopagebreak\n"))
+    else
+      return el
+    end
+  end
+
   -- cv-contact: contact info row
   if el.classes:includes("cv-contact") then
     if FORMAT:match("latex") or FORMAT:match("pdf") then

@@ -33,6 +33,7 @@ source, then re-render.
 | Award, honor, grant | yes | no |
 | Teaching | yes | no |
 | Media appearance | yes | no |
+| Referee / letter writer | **never** — private file, see *Referees* | no |
 
 Anything paper-shaped lives in both files. Everything else is CV-only. When an
 item goes in both, add it to both in the same change — the two drifting apart
@@ -105,6 +106,44 @@ the wording instead.
 **Escape `&`, `#`, and `%`** anywhere in `cv.qmd`. The filter escapes those for
 LaTeX, but only in the places it handles — a stray one elsewhere can break the
 PDF build.
+
+## Referees
+
+The public CV lists References as *Available upon request*, deliberately.
+This repository is public on GitHub, so a referee's email or phone number
+written into `cv.qmd` — or into any file in the repo — is published. That is
+how an April 2024 CV in `files/` came to expose referees' email addresses.
+
+Referee details live only in a private file **outside** the repo:
+
+```
+Dropbox\Job Market Materials\Job Market 2026\CV-private\references.md
+```
+
+To add, remove, or update a referee:
+
+1. **Edit that private file**, never `cv.qmd`. Each referee is one paragraph
+   inside the `::: {.cv-referees}` block; a trailing backslash ends each line,
+   and a blank line starts the next referee.
+2. **Build the private CV:**
+
+   ```powershell
+   .\tools\render-cv-offline.ps1
+   ```
+
+   It splices the file into a scratch copy of `cv.qmd` between the
+   `offline-references` markers, renders only the PDF, confirms every referee
+   email made it in, saves a dated `CV-Jensen-with-references_M-D-YY.pdf` next
+   to the references file, and deletes the scratch copy. The dated name means
+   the copy already sent to a committee is never overwritten by a later build.
+3. **Look at the page before sending.** The two-column grid is kept together
+   with its heading on purpose; check that it still reads cleanly after edits.
+
+Nothing changes on the site side, so there is nothing to render or commit.
+
+Keep both `offline-references` markers around the References block in
+`cv.qmd` — the build refuses to run without exactly one of each. Next job
+market cycle, point the build at the new year's folder with `-PrivateDir`.
 
 ## Paper lifecycle
 

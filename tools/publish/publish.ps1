@@ -33,6 +33,10 @@
 .PARAMETER DryRun
     Show what would transfer without uploading anything.
 
+.PARAMETER AllowReferences
+    Skip the referee-contact check. Only for a paper whose text after its
+    References heading genuinely contains an email address; never for a CV.
+
 .EXAMPLE
     .\publish.ps1
 
@@ -48,7 +52,8 @@ param(
     [string] $PublishFolder = (Join-Path $env:USERPROFILE 'website-materials'),
     [string] $Remote        = 'dropbox:Published/website-materials',
     [string] $Manifest      = (Join-Path $PSScriptRoot 'manifest.yml'),
-    [switch] $DryRun
+    [switch] $DryRun,
+    [switch] $AllowReferences
 )
 
 $ErrorActionPreference = 'Stop'
@@ -268,6 +273,14 @@ function Resolve-Rclone {
     return $null
 }
 
+function Resolve-PdfToText {
+    $cmd = Get-Command pdftotext -ErrorAction SilentlyContinue
+    if ($cmd) { return $cmd.Source }
+    $fallback = Join-Path $env:LOCALAPPDATA 'poppler\bin\pdftotext.exe'
+    if (Test-Path $fallback) { return $fallback }
+    return $null
+}
+
 # ===========================================================================
 # 1. Preflight
 # ===========================================================================
@@ -360,6 +373,86 @@ $nonPdf = @(Get-ChildItem $PublishFolder -File | Where-Object { $_.Extension.ToL
 if ($nonPdf.Count -gt 0) {
     Write-Warn "Ignoring $($nonPdf.Count) non-PDF file(s) in the publish folder (never uploaded):"
     foreach ($n in $nonPdf) { Write-Warn "  $($n.Name)" }
+}
+
+# ---------------------------------------------------------------------------
+# Refuse PDFs that carry referee contact details.
+#
+# The CV sent with applications lists referees' emails and phone numbers
+# (tools/render-cv-offline.ps1 builds it). Those are other people's details,
+# and anything uploaded here ends up behind a public share link. The check:
+# find the last line that BEGINS with "References", and refuse if an email
+# address appears anywhere after the word. A paper's bibliography contains no
+# email addresses; a referee list always does.
+#
+# Two details that were learned by testing, not assumed:
+#   * Match lines that start with "References", not lines that are only
+#     "References". pdftotext -layout merges a heading with whatever sits
+#     beside it, so a two-column referee grid extracts as
+#     "References            Ben Stickle" and an exact-line match never fires.
+#   * Extract twice (layout and reading order) and flag on either. The two
+#     modes fail differently depending on how the PDF was produced (LaTeX,
+#     Word, Google Docs), and one miss here publishes someone's phone number.
+# ---------------------------------------------------------------------------
+function Test-HasRefereeContacts {
+    param([string] $PdfToText, [string] $Path)
+
+    # Iterate over names, not argument arrays: @(@('-layout'), @()) flattens
+    # to a single '-layout' element, and the reading-order pass silently
+    # never runs.
+    foreach ($mode in @('layout', 'reading-order')) {
+        if ($mode -eq 'layout') {
+            $text = (& $PdfToText -layout $Path - | Out-String)
+        } else {
+            $text = (& $PdfToText $Path - | Out-String)
+        }
+        $lines = $text -split "`r?`n"
+        $last  = -1
+        for ($i = 0; $i -lt $lines.Count; $i++) {
+            if ($lines[$i] -match '^\s*references\b') { $last = $i }
+        }
+        if ($last -lt 0) { continue }
+
+        # Text on the heading line itself after the word, then every later line.
+        $after = $lines[$last] -replace '(?i)^.*?references', ''
+        # Guard the slice: PowerShell ranges count DOWN when start > end, so a
+        # heading on the very last line would otherwise re-read itself.
+        if ($last -lt ($lines.Count - 1)) {
+            $after += "`n" + ($lines[($last + 1)..($lines.Count - 1)] -join "`n")
+        }
+        if ($after -match '[\w.+-]+@[\w-]+\.[\w.-]+') { return $true }
+    }
+    return $false
+}
+
+if ($AllowReferences) {
+    Write-Warn '-AllowReferences given: skipping the referee-contact check.'
+} else {
+    $pdftotext = Resolve-PdfToText
+    if (-not $pdftotext) {
+        Write-Warn 'pdftotext not found - cannot check PDFs for referee contact details.'
+    } else {
+        $flagged = New-Object System.Collections.Generic.List[string]
+        foreach ($c in $candidates) {
+            if (Test-HasRefereeContacts -PdfToText $pdftotext -Path $c.FullName) { $flagged.Add($c.Name) }
+        }
+
+        if ($flagged.Count -gt 0) {
+            Write-Host ''
+            Write-Err 'REFUSING TO RUN.'
+            Write-Host '  These PDFs have email addresses under a References heading. That is a'
+            Write-Host '  referee list, and uploading it would put other people''s contact'
+            Write-Host '  details behind a public link:'
+            foreach ($f in $flagged) { Write-Host "    $f" -ForegroundColor Red }
+            Write-Host ''
+            Write-Host '  The public CV is docs\cv.pdf ("Available upon request"), and the site'
+            Write-Host '  already serves it at nicholas-jensen.com/cv.pdf.'
+            Write-Host '  If this is a paper whose appendix genuinely contains an email address,'
+            Write-Host '  re-run with -AllowReferences.'
+            exit 1
+        }
+        Write-Ok 'no referee contact details found'
+    }
 }
 
 # ===========================================================================

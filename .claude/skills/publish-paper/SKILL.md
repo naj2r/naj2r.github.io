@@ -136,6 +136,15 @@ misplaced file lands somewhere harmless instead of one right-click from being
 world-readable. Never stage anything there that would embarrass the user in
 front of a referee.
 
+**Never publish the CV that lists referees.** `tools/render-cv-offline.ps1`
+builds a private CV with referees' emails and phone numbers for job
+applications; that PDF must not be staged. `publish.ps1` refuses any PDF with
+an email address after a References heading, checking both pdftotext
+extraction modes because each misses different layouts. The public CV needs
+no Dropbox link at all — the site already serves it at
+`nicholas-jensen.com/cv.pdf`. `-AllowReferences` exists only for a paper whose
+appendix genuinely contains an email address; never use it for a CV.
+
 `rclone.conf` in `%APPDATA%\rclone\` holds a Dropbox refresh token. Never copy
 it into the repo (public, serves GitHub Pages) or into Dropbox itself
 (circular). On a new machine, re-run `rclone config` rather than moving the

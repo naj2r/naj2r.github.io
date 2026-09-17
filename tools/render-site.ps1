@@ -36,6 +36,10 @@
 .PARAMETER KeepWorkDir
     Leave the scratch copy in place afterwards (useful for debugging a render).
 
+.PARAMETER SkipLocalCv
+    Do not refresh the on-disk CV pair (public and with-references, .pdf and
+    .tex) after the site renders. See tools/render-cv-offline.ps1.
+
 .EXAMPLE
     .\render-site.ps1
 #>
@@ -43,7 +47,8 @@
 param(
     [string] $RepoRoot = (Split-Path $PSScriptRoot -Parent),
     [string] $WorkDir  = (Join-Path $env:TEMP 'qr-naj2r'),
-    [switch] $KeepWorkDir
+    [switch] $KeepWorkDir,
+    [switch] $SkipLocalCv
 )
 
 $ErrorActionPreference = 'Stop'
@@ -224,6 +229,28 @@ if (-not $KeepWorkDir) {
 
 Write-Host ''
 Write-Ok 'Render complete.'
+
+# ---------------------------------------------------------------------------
+# Refresh the on-disk CV pair.
+#
+# There should always be a current public CV and a current CV with references
+# on disk, each as .pdf and .tex. Rebuilding them whenever the site renders
+# keeps that true without anyone having to remember. Non-fatal on purpose: the
+# site render has already succeeded, and the private build depends on a
+# references file outside the repo, which will be missing on a fresh machine.
+# ---------------------------------------------------------------------------
+if (-not $SkipLocalCv) {
+    Write-Section 'On-disk CV pair'
+    $localCv = Join-Path $PSScriptRoot 'render-cv-offline.ps1'
+    try {
+        & $localCv -RepoRoot $RepoRoot
+        if ($LASTEXITCODE -ne 0) {
+            Write-Warn 'The on-disk CV pair was NOT refreshed (see above). The site render itself succeeded.'
+        }
+    } catch {
+        Write-Warn "The on-disk CV pair was NOT refreshed: $($_.Exception.Message)"
+    }
+}
 
 # robocopy sets $LASTEXITCODE to 1 on "files copied successfully". Without an
 # explicit exit, that code leaks out as this script's status and every caller

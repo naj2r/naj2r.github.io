@@ -107,7 +107,23 @@ the wording instead.
 LaTeX, but only in the places it handles — a stray one elsewhere can break the
 PDF build.
 
-## Referees
+## Referees and the on-disk CV pair
+
+There are always two current versions of the CV on disk, each as `.pdf` and
+`.tex` — four files, rebuilt together:
+
+```
+Dropbox\Job Market Materials\Job Market 2026\
+  CV-snapshots\CV-Jensen_M-D-YY.pdf / .tex                    public
+  CV-private\CV-Jensen-with-references_M-D-YY.pdf / .tex      sent with applications
+```
+
+Both come from the same snapshot of `cv.qmd` in one run, so they differ only
+in the References section. `tools/render-site.ps1` rebuilds the pair after
+every site render, so any CV change refreshes them automatically. The `.tex`
+files are the exact sources LuaLaTeX compiled, with the header inlined: each
+compiles alone in an empty folder, but needs LuaLaTeX or XeLaTeX (the CV uses
+`fontspec` with Libertinus Serif). In Overleaf, set the compiler to LuaLaTeX.
 
 The public CV lists References as *Available upon request*, deliberately.
 This repository is public on GitHub, so a referee's email or phone number
@@ -125,25 +141,28 @@ To add, remove, or update a referee:
 1. **Edit that private file**, never `cv.qmd`. Each referee is one paragraph
    inside the `::: {.cv-referees}` block; a trailing backslash ends each line,
    and a blank line starts the next referee.
-2. **Build the private CV:**
+2. **Rebuild the pair:**
 
    ```powershell
    .\tools\render-cv-offline.ps1
    ```
 
-   It splices the file into a scratch copy of `cv.qmd` between the
-   `offline-references` markers, renders only the PDF, confirms every referee
-   email made it in, saves a dated `CV-Jensen-with-references_M-D-YY.pdf` next
-   to the references file, and deletes the scratch copy. The dated name means
-   the copy already sent to a committee is never overwritten by a later build.
-3. **Look at the page before sending.** The two-column grid is kept together
-   with its heading on purpose; check that it still reads cleanly after edits.
+   It renders the public CV, then splices the referees into a scratch copy of
+   `cv.qmd` between the `offline-references` markers and renders again. It
+   verifies the public build has no referee details and the private build has
+   all of them, saves the four dated files, and deletes the scratch copy even
+   if a render fails. Dated names mean a copy already sent to a committee is
+   never overwritten by a build on a later day.
+3. **Look at the references page before sending.** The two-column grid is
+   kept together with its heading on purpose; check it still reads cleanly.
 
-Nothing changes on the site side, so there is nothing to render or commit.
+A referee-only change touches nothing on the site, so there is nothing to
+render or commit.
 
 Keep both `offline-references` markers around the References block in
-`cv.qmd` — the build refuses to run without exactly one of each. Next job
-market cycle, point the build at the new year's folder with `-PrivateDir`.
+`cv.qmd` — the build refuses to run without exactly one of each. Each job
+market cycle, point the build at the new year's folder with `-JobMarketDir`
+and carry `references.md` over from the previous cycle.
 
 ## Paper lifecycle
 
@@ -194,7 +213,9 @@ Check the date before assuming; conferences are often added a year ahead.
    `docs/`, writes a ~110-byte empty sitemap, and exits 0 reporting success.
    The script renders from a dot-free temp path, verifies inputs were actually
    discovered, sanity-checks the output, and mirrors `docs/` back. It refuses
-   to overwrite `docs/` with an empty render.
+   to overwrite `docs/` with an empty render. It then rebuilds the on-disk CV
+   pair (see *Referees and the on-disk CV pair*); a problem there prints a
+   warning but never fails the site render.
 
 4. **Verify the change landed** in the built output — grep `docs/cv.html` and
    `docs/research/index.html` for the new text rather than assuming.

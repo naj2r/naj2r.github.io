@@ -132,8 +132,25 @@ h3 {
   }
 }
 
+// Referees: two columns, one referee per cell. Mirrors the PDF grid that the
+// cv-referees branch of templates/cv-filter.lua builds.
+.cv-referees {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem 2rem;
+
+  p {
+    margin-bottom: 0;
+    overflow-wrap: anywhere;
+  }
+}
+
 // On narrow screens, stack contact rows vertically
 @media (max-width: 576px) {
+  .cv-referees {
+    grid-template-columns: 1fr;
+  }
+
   .cv-contact p {
     flex-direction: column;
     align-items: flex-start;

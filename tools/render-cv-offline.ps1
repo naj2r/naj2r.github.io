@@ -21,10 +21,12 @@
     differ only in the References section. The public pair is saved first, so
     a problem in a referee file never stops the public CV from being current.
 
-    Referee details can never live in the repo: naj2r.github.io is PUBLIC on
-    GitHub. This script splices them into a scratch copy of cv.qmd between the
-    offline-references markers, renders, verifies, saves, and deletes the
-    scratch copy - even when a render fails.
+    The public CV lists referees by name, position, institution and email:
+    university-affiliated details they agreed to publish. Phone numbers never
+    go in the repo, because naj2r.github.io is PUBLIC on GitHub. They live only
+    in the private referee files, and this script splices those into a scratch
+    copy of cv.qmd between the offline-references markers, renders, verifies,
+    saves, and deletes the scratch copy - even when a render fails.
 
     Referee files hold paragraphs only; the build wraps them in the
     cv-referees grid. A line containing TODO (outside HTML comments) blocks
@@ -89,6 +91,22 @@ function Get-Emails {
     return @([regex]::Matches($Text, '[\w.+-]+@[\w-]+\.[\w.-]+') | ForEach-Object { $_.Value } | Sort-Object -Unique)
 }
 
+# A US-style phone number. The lookarounds stop it matching inside a longer run
+# of characters: a DOI such as 10.1007/s11127-026-01386-6 contains 3-3-4 digit
+# groups that a looser pattern reads as a number. Kept identical to the pattern
+# in tools/publish/publish.ps1, which was tested on the published papers (no
+# hits) and on every private CV (all hit).
+$PhonePattern = '(?<![\w.-])(?:\+?1[\s.-])?\(?\d{3}\)?[\s.-]{1,2}\d{3}[\s.-]\d{4}(?![\w-])'
+
+# Phone numbers in $Text as bare 10-digit strings, so formatting never matters.
+function Get-Phones {
+    param([string] $Text)
+    return @([regex]::Matches($Text, $PhonePattern) |
+        ForEach-Object { ($_.Value -replace '\D', '') } |
+        ForEach-Object { $_.Substring($_.Length - 10) } |
+        Sort-Object -Unique)
+}
+
 # Read a referee file. HTML comments carry instructions and may mention TODO
 # or fences freely, so they are stripped before anything is checked.
 function Read-RefereeFile {
@@ -104,6 +122,7 @@ function Read-RefereeFile {
         Name     = [System.IO.Path]::GetFileNameWithoutExtension($Path)
         Body     = $body
         Emails   = @(Get-Emails $body)
+        Phones   = @(Get-Phones $body)
         Problems = $problems
     }
 }
@@ -269,8 +288,8 @@ if ($nStart -ne 1 -or $nEnd -ne 1 -or $ei -lt $si) {
 $startClose = $src.IndexOf('-->', $si)
 Write-Ok 'offline-references markers found in cv.qmd'
 
-# Every address in every referee file - the public CV must contain none.
-$allRefereeEmails = @((@($fixed) + $alternates) | ForEach-Object { $_.Emails } | Sort-Object -Unique)
+# Every phone number in every referee file - the public CV must contain none.
+$allRefereePhones = @((@($fixed) + $alternates) | ForEach-Object { $_.Phones } | Sort-Object -Unique)
 
 $pdfToText = Resolve-PdfToText
 if (-not $pdfToText) {
@@ -311,21 +330,32 @@ try {
 
         if (-not @(Invoke-CvRender -Dir $WorkDir)[-1]) { $exitCode = 1; break }
 
-        $pubTex = [System.IO.File]::ReadAllText((Join-Path $WorkDir 'cv.tex'), [System.Text.Encoding]::UTF8)
-        $leaked = @($allRefereeEmails | Where-Object { $pubTex.IndexOf($_, [System.StringComparison]::OrdinalIgnoreCase) -ge 0 })
-        if ($pdfToText) {
-            $pubText = (& $pdfToText -layout (Join-Path $WorkDir 'docs\cv.pdf') - | Out-String)
-            $leaked += @($allRefereeEmails | Where-Object { $pubText.IndexOf($_, [System.StringComparison]::OrdinalIgnoreCase) -ge 0 })
-            if ($pubText -notmatch '(?i)available upon request') {
-                Write-Err 'The public CV no longer says "Available upon request". Check cv.qmd between the markers.'
-                $exitCode = 1; break
-            }
-        }
-        if ($leaked.Count -gt 0) {
-            Write-Err 'A referee email address appears in the PUBLIC CV. Something is written into cv.qmd that must not be.'
+        $pubTex  = [System.IO.File]::ReadAllText((Join-Path $WorkDir 'cv.tex'), [System.Text.Encoding]::UTF8)
+        $pubText = ''
+        if ($pdfToText) { $pubText = (& $pdfToText -layout (Join-Path $WorkDir 'docs\cv.pdf') - | Out-String) }
+        $pubAll = $pubTex + "`n" + $pubText
+
+        # Referees' names, positions, institutions and emails may be public.
+        # Their phone numbers may not. Two independent checks: anything shaped
+        # like a phone number, and each known referee number as a bare digit
+        # run (which catches formatting the pattern would miss).
+        $leakedPhones = @(Get-Phones $pubAll)
+        $pubDigits    = $pubAll -replace '\D', ''
+        $leakedPhones += @($allRefereePhones | Where-Object { $pubDigits.IndexOf($_) -ge 0 })
+        $leakedPhones = @($leakedPhones | Sort-Object -Unique)
+        if ($leakedPhones.Count -gt 0) {
+            $tails = ($leakedPhones | ForEach-Object { '...' + $_.Substring(6) }) -join ', '
+            Write-Err "$($leakedPhones.Count) phone number(s) appear in the PUBLIC CV ($tails). Phone numbers live only in the private referee files."
             $exitCode = 1; break
         }
-        Write-Ok "no referee details present (checked $($allRefereeEmails.Count) address(es) across all referee files)"
+        Write-Ok "no phone numbers in the public CV (checked $($allRefereePhones.Count) referee number(s) plus the general phone pattern)"
+
+        # The public list is hand-maintained in cv.qmd. Say so if it has drifted
+        # from the referees who are on every application.
+        $notListed = @($fixed.Emails | Where-Object { $pubAll.IndexOf($_, [System.StringComparison]::OrdinalIgnoreCase) -lt 0 })
+        if ($notListed.Count -gt 0) {
+            Write-Warn "The public CV does not list: $($notListed -join ', '). Update the References block in cv.qmd."
+        }
         Save-Pair -Dir $WorkDir -PdfDest $publicPdf -TexDest $publicTex
         $saved.Add($publicPdf); $saved.Add($publicTex)
 
@@ -358,28 +388,38 @@ try {
 
             if (-not @(Invoke-CvRender -Dir $WorkDir)[-1]) { $blocked.Add($title); continue }
 
-            $want = @($v.Parts | ForEach-Object { $_.Emails } | Sort-Object -Unique)
-            if ($want.Count -eq 0) { Write-Warn 'No email addresses in these referee entries - verification is limited.' }
+            $want      = @($v.Parts | ForEach-Object { $_.Emails } | Sort-Object -Unique)
+            $wantPhone = @($v.Parts | ForEach-Object { $_.Phones } | Sort-Object -Unique)
+            if ($want.Count -eq 0)      { Write-Warn 'No email addresses in these referee entries - verification is limited.' }
+            if ($wantPhone.Count -eq 0) { Write-Warn 'No phone numbers in these referee entries - this CV adds nothing to the public one.' }
 
-            $tex = [System.IO.File]::ReadAllText((Join-Path $WorkDir 'cv.tex'), [System.Text.Encoding]::UTF8)
+            $tex  = [System.IO.File]::ReadAllText((Join-Path $WorkDir 'cv.tex'), [System.Text.Encoding]::UTF8)
+            $text = ''
+            if ($pdfToText) { $text = (& $pdfToText -layout (Join-Path $WorkDir 'docs\cv.pdf') - | Out-String) }
+
             $missing = @($want | Where-Object { $tex.IndexOf($_, [System.StringComparison]::OrdinalIgnoreCase) -lt 0 })
-            $stillUpon = $false
-            if ($pdfToText) {
-                $text = (& $pdfToText -layout (Join-Path $WorkDir 'docs\cv.pdf') - | Out-String)
-                $missing += @($want | Where-Object { $text.IndexOf($_, [System.StringComparison]::OrdinalIgnoreCase) -lt 0 })
-                $stillUpon = ($text -match '(?i)available upon request')
-            }
+            if ($pdfToText) { $missing += @($want | Where-Object { $text.IndexOf($_, [System.StringComparison]::OrdinalIgnoreCase) -lt 0 }) }
             $missing = @($missing | Sort-Object -Unique)
-            if ($stillUpon) {
-                Write-Err 'Still says "Available upon request" - the swap did not take effect.'
-                $blocked.Add($title); continue
-            }
+
+            # Phones are compared as bare digits so any formatting counts. The
+            # public block carries emails but no phones, so a missing phone is
+            # also how a swap that did not take effect shows up.
+            $texDigits  = $tex  -replace '\D', ''
+            $textDigits = $text -replace '\D', ''
+            $missingPhone = @($wantPhone | Where-Object { $texDigits.IndexOf($_) -lt 0 })
+            if ($pdfToText) { $missingPhone += @($wantPhone | Where-Object { $textDigits.IndexOf($_) -lt 0 }) }
+            $missingPhone = @($missingPhone | Sort-Object -Unique)
+
             if ($missing.Count -gt 0) {
                 Write-Err "$($missing.Count) referee email(s) did not make it into the CV:"
                 foreach ($m in $missing) { Write-Host "    $m" }
                 $blocked.Add($title); continue
             }
-            Write-Ok "all $($want.Count) referee email(s) present"
+            if ($missingPhone.Count -gt 0) {
+                Write-Err "$($missingPhone.Count) referee phone number(s) did not make it into the CV - the swap may not have taken effect."
+                $blocked.Add($title); continue
+            }
+            Write-Ok "all $($want.Count) referee email(s) and $($wantPhone.Count) phone number(s) present"
             Save-Pair -Dir $WorkDir -PdfDest $v.Pdf -TexDest $v.Tex
             $saved.Add($v.Pdf); $saved.Add($v.Tex)
         }
@@ -406,7 +446,7 @@ if ($blocked.Count -gt 0) {
 }
 if ($saved | Where-Object { $_ -like '*with-references*' }) {
     Write-Host ''
-    Write-Host '  CVs with references contain referees'' contact details. Send them with' -ForegroundColor Yellow
+    Write-Host '  CVs with references carry referees'' phone numbers. Send them with' -ForegroundColor Yellow
     Write-Host '  applications; never stage them for publishing (publish.ps1 refuses them).' -ForegroundColor Yellow
 }
 

@@ -33,7 +33,7 @@ source, then re-render.
 | Award, honor, grant | yes | no |
 | Teaching | yes | no |
 | Media appearance | yes | no |
-| Referee / letter writer | **never** — private file, see *Referees and the on-disk CVs* | no |
+| Referee | name, position, institution and email only — never a phone number; see *Referees and the on-disk CVs* | no |
 
 Anything paper-shaped lives in both files. Everything else is CV-only. When an
 item goes in both, add it to both in the same change — the two drifting apart
@@ -125,12 +125,15 @@ files are the exact sources LuaLaTeX compiled, with the header inlined: each
 compiles alone in an empty folder, but needs LuaLaTeX or XeLaTeX (the CV uses
 `fontspec` with Libertinus Serif). In Overleaf, set the compiler to LuaLaTeX.
 
-The public CV lists References as *Available upon request*, deliberately.
-This repository is public on GitHub, so a referee's email or phone number
-written into `cv.qmd` — or into any file in the repo — is published. That is
-how an April 2024 CV in `files/` came to expose referees' email addresses.
+The public CV lists referees with their name, position, institution and
+email: university-affiliated details they agreed to publish. It never carries
+a **phone number** or anything personal. This repository is public on GitHub,
+so whatever is written into `cv.qmd`, or any file in the repo, is published.
+The list in `cv.qmd` is hand-maintained; its third slot is whichever alternate
+is current (Vaca Pereira Rocha for now).
 
-Referee details live only **outside** the repo:
+Their full contact details, phone numbers included, live only **outside** the
+repo:
 
 ```
 Dropbox\Job Market Materials\Job Market 2026\CV-private\
@@ -146,11 +149,13 @@ attaches whichever fits. With that folder empty, it builds a single
 
 To add, remove, or update a referee:
 
-1. **Edit the private files**, never `cv.qmd`. Each referee is one paragraph:
-   a trailing backslash ends each line, and a blank line separates referees.
-   No `:::` fences — the build wraps the entries in the `cv-referees` grid. A
-   new alternate is a new file in `third-reference\`; retiring one means
-   deleting its file.
+1. **Edit the private files first** (they carry the phone numbers). Each
+   referee is one paragraph: a trailing backslash ends each line, and a blank
+   line separates referees. No `:::` fences — the build wraps the entries in
+   the `cv-referees` grid. A new alternate is a new file in `third-reference\`;
+   retiring one means deleting its file. If the change touches a name,
+   position, institution or email, mirror it in the References block of
+   `cv.qmd` — minus the phone — then render and commit as usual.
 2. **Rebuild:**
 
    ```powershell
@@ -159,8 +164,9 @@ To add, remove, or update a referee:
 
    It saves the public pair first, then splices each referee set into a
    scratch copy of `cv.qmd` between the `offline-references` markers and
-   renders. It verifies the public CV holds no referee details and each CV
-   with references holds all of its referees' emails, saves dated files, and
+   renders. It verifies the public CV holds no phone number (each known
+   referee number, plus a general phone pattern) and each CV with references
+   holds all of its referees' emails and phone numbers, saves dated files, and
    deletes the scratch copy even if a render fails. Dated names mean a copy
    already sent to a committee is never overwritten by a build on a later day.
 3. **Look at the references page before sending.** The grid is kept together
@@ -171,8 +177,9 @@ half-filled entry never reaches an application. A `TODO` in `references.md`
 blocks every CV with references; one in an alternate blocks only that
 alternate's CV. The public pair is saved either way.
 
-A referee-only change touches nothing on the site, so there is nothing to
-render or commit.
+A change to a phone number alone touches nothing on the site, so there is
+nothing to render or commit. Any other change to a referee does: update
+`cv.qmd`, render, commit.
 
 Keep both `offline-references` markers around the References block in
 `cv.qmd` — the build refuses to run without exactly one of each. Each job

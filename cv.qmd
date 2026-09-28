@@ -355,10 +355,31 @@ ECON 2252 Principles of Microeconomics
 
 ## References
 
-<!-- offline-references:start  Referee contact details never go in this file: the repo is public.
-     tools/render-cv-offline.ps1 swaps this block for a private references file when building
-     the CV you send with applications. Keep both markers. -->
+<!-- offline-references:start  Public referee details only: name, position, institution and
+     email. Never a phone number or a home address: the repo is public.
+     tools/render-cv-offline.ps1 swaps this block for the private references file (which adds
+     phone numbers) when building the CV you send with applications. Keep both markers. -->
 
-*Available upon request.*
+::: {.cv-referees}
+
+**Daniel J. Smith**\
+Professor of Economics\
+Director, Political Economy Research Institute\
+Middle Tennessee State University\
+<Daniel.Smith@mtsu.edu>
+
+**Daniel J. D'Amico**\
+Inaugural Director\
+Stephenson Institute for Classical Liberalism\
+Affiliated Associate Professor\
+Wabash College\
+<damicod@wabash.edu>
+
+**Hugo Vaca Pereira Rocha**\
+Assistant Professor of Economics\
+University of Wisconsin--La Crosse\
+<hvacapereirarocha@uwlax.edu>
+
+:::
 
 <!-- offline-references:end -->

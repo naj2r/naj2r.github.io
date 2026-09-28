@@ -109,11 +109,13 @@ jensen-cv.pdf
    entries whose local file has vanished — often the fingerprint of a rename.
 4. **PDFs only.** Anything else in the publish folder is listed and skipped.
 5. **The scripts never create, read, or modify share links.**
-6. **No referee lists.** `publish.ps1` refuses any PDF with an email address
-   after a References heading. The CV with referees
+6. **No phone numbers.** `publish.ps1` refuses any PDF containing a phone
+   number, scanning the whole document. Referees' names, positions,
+   institutions and emails are public and appear on the public CV; their phone
+   numbers are not. The CV with referees' phone numbers
    (`tools/render-cv-offline.ps1`) is for applications only; the public CV is
    already served at `nicholas-jensen.com/cv.pdf`. Override with
-   `-AllowReferences` only for a paper whose appendix genuinely has an email.
+   `-AllowPhoneNumbers` only for a paper that genuinely contains one.
 
 Also, out of band: do **not** enable Overleaf's built-in Dropbox sync for these
 projects. It syncs whole projects including source files and behaves like the

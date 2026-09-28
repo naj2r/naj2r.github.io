@@ -33,9 +33,9 @@
 .PARAMETER DryRun
     Show what would transfer without uploading anything.
 
-.PARAMETER AllowReferences
-    Skip the referee-contact check. Only for a paper whose text after its
-    References heading genuinely contains an email address; never for a CV.
+.PARAMETER AllowPhoneNumbers
+    Skip the phone-number check. Only for a paper that genuinely contains a
+    phone number; never for a CV.
 
 .EXAMPLE
     .\publish.ps1
@@ -53,7 +53,7 @@ param(
     [string] $Remote        = 'dropbox:Published/website-materials',
     [string] $Manifest      = (Join-Path $PSScriptRoot 'manifest.yml'),
     [switch] $DryRun,
-    [switch] $AllowReferences
+    [switch] $AllowPhoneNumbers
 )
 
 $ErrorActionPreference = 'Stop'
@@ -376,82 +376,60 @@ if ($nonPdf.Count -gt 0) {
 }
 
 # ---------------------------------------------------------------------------
-# Refuse PDFs that carry referee contact details.
+# Refuse PDFs that contain a phone number.
 #
-# The CV sent with applications lists referees' emails and phone numbers
-# (tools/render-cv-offline.ps1 builds it). Those are other people's details,
-# and anything uploaded here ends up behind a public share link. The check:
-# find the last line that BEGINS with "References", and refuse if an email
-# address appears anywhere after the word. A paper's bibliography contains no
-# email addresses; a referee list always does.
+# Referees' names, positions, institutions and emails are public and appear on
+# the public CV, so those are fine. Their PHONE NUMBERS are not: the CV built
+# for applications (tools/render-cv-offline.ps1) carries them, and anything
+# uploaded here ends up behind a public share link.
 #
-# Two details that were learned by testing, not assumed:
-#   * Match lines that start with "References", not lines that are only
-#     "References". pdftotext -layout merges a heading with whatever sits
-#     beside it, so a two-column referee grid extracts as
-#     "References            Ben Stickle" and an exact-line match never fires.
-#   * Extract twice (layout and reading order) and flag on either. The two
-#     modes fail differently depending on how the PDF was produced (LaTeX,
-#     Word, Google Docs), and one miss here publishes someone's phone number.
+# The whole document is scanned, not just its tail: a phone number has no
+# business in a paper, and a CV need not put References last. The pattern is
+# strict about boundaries, because DOIs and URLs contain digit groups (as in
+# 10.1007/s11127-026-01386-6) that a looser pattern reads as a number. It is kept identical
+# to the one in tools/render-cv-offline.ps1 and was tested on the published
+# papers (no hits, including the 106-page one) and on every private CV (all hit).
+#
+# Extract twice (layout and reading order) and flag on either. The two modes
+# split text differently depending on how the PDF was produced (LaTeX, Word,
+# Google Docs), and one miss here publishes someone's phone number.
 # ---------------------------------------------------------------------------
-function Test-HasRefereeContacts {
+$PhonePattern = '(?<![\w.-])(?:\+?1[\s.-])?\(?\d{3}\)?[\s.-]{1,2}\d{3}[\s.-]\d{4}(?![\w-])'
+
+function Test-HasPhoneNumbers {
     param([string] $PdfToText, [string] $Path)
 
-    # Iterate over names, not argument arrays: @(@('-layout'), @()) flattens
-    # to a single '-layout' element, and the reading-order pass silently
-    # never runs.
-    foreach ($mode in @('layout', 'reading-order')) {
-        if ($mode -eq 'layout') {
-            $text = (& $PdfToText -layout $Path - | Out-String)
-        } else {
-            $text = (& $PdfToText $Path - | Out-String)
-        }
-        $lines = $text -split "`r?`n"
-        $last  = -1
-        for ($i = 0; $i -lt $lines.Count; $i++) {
-            if ($lines[$i] -match '^\s*references\b') { $last = $i }
-        }
-        if ($last -lt 0) { continue }
-
-        # Text on the heading line itself after the word, then every later line.
-        $after = $lines[$last] -replace '(?i)^.*?references', ''
-        # Guard the slice: PowerShell ranges count DOWN when start > end, so a
-        # heading on the very last line would otherwise re-read itself.
-        if ($last -lt ($lines.Count - 1)) {
-            $after += "`n" + ($lines[($last + 1)..($lines.Count - 1)] -join "`n")
-        }
-        if ($after -match '[\w.+-]+@[\w-]+\.[\w.-]+') { return $true }
-    }
-    return $false
+    $text = (& $PdfToText -layout $Path - | Out-String)
+    if ($text -match $PhonePattern) { return $true }
+    $text = (& $PdfToText $Path - | Out-String)
+    return [bool]($text -match $PhonePattern)
 }
 
-if ($AllowReferences) {
-    Write-Warn '-AllowReferences given: skipping the referee-contact check.'
+if ($AllowPhoneNumbers) {
+    Write-Warn '-AllowPhoneNumbers given: skipping the phone-number check.'
 } else {
     $pdftotext = Resolve-PdfToText
     if (-not $pdftotext) {
-        Write-Warn 'pdftotext not found - cannot check PDFs for referee contact details.'
+        Write-Warn 'pdftotext not found - cannot check PDFs for phone numbers.'
     } else {
         $flagged = New-Object System.Collections.Generic.List[string]
         foreach ($c in $candidates) {
-            if (Test-HasRefereeContacts -PdfToText $pdftotext -Path $c.FullName) { $flagged.Add($c.Name) }
+            if (Test-HasPhoneNumbers -PdfToText $pdftotext -Path $c.FullName) { $flagged.Add($c.Name) }
         }
 
         if ($flagged.Count -gt 0) {
             Write-Host ''
             Write-Err 'REFUSING TO RUN.'
-            Write-Host '  These PDFs have email addresses under a References heading. That is a'
-            Write-Host '  referee list, and uploading it would put other people''s contact'
-            Write-Host '  details behind a public link:'
+            Write-Host '  These PDFs contain a phone number. If one is a CV with references, that is'
+            Write-Host '  a referee''s number, and uploading it would put it behind a public link:'
             foreach ($f in $flagged) { Write-Host "    $f" -ForegroundColor Red }
             Write-Host ''
-            Write-Host '  The public CV is docs\cv.pdf ("Available upon request"), and the site'
-            Write-Host '  already serves it at nicholas-jensen.com/cv.pdf.'
-            Write-Host '  If this is a paper whose appendix genuinely contains an email address,'
-            Write-Host '  re-run with -AllowReferences.'
+            Write-Host '  The public CV (names, positions, institutions and emails, no phone numbers)'
+            Write-Host '  is docs\cv.pdf, and the site already serves it at nicholas-jensen.com/cv.pdf.'
+            Write-Host '  If a paper genuinely contains a phone number, re-run with -AllowPhoneNumbers.'
             exit 1
         }
-        Write-Ok 'no referee contact details found'
+        Write-Ok 'no phone numbers found'
     }
 }
 

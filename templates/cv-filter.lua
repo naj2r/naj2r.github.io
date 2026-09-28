@@ -160,10 +160,10 @@ function Div(el)
 
   -- cv-referees: referee blocks in a two-column grid.
   --
-  -- Only the private offline CV uses this (tools/render-cv-offline.ps1 splices
-  -- the referees in from a file outside the repo); the public cv.qmd never
-  -- holds referee contact details. Each paragraph inside the div is one
-  -- referee.
+  -- Both CVs use this. The public cv.qmd lists referees by name, position,
+  -- institution and email; tools/render-cv-offline.ps1 swaps in the private
+  -- version, which adds phone numbers, from a file outside the repo. Each
+  -- paragraph inside the div is one referee.
   --
   -- Deliberately NOT Quarto's layout-ncol: in PDF output that becomes a figure
   -- float, which detaches from the "References" heading and gets parked

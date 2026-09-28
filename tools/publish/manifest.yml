@@ -29,7 +29,9 @@
 
 - paper: Who Killed the Green Fairy? (Swiss absinthe ban of 1908)
   filename: jensen-absinthe.pdf
-  share_url: ""
+  # raw=1 serves the PDF inline; the ephemeral st= token Dropbox appends is
+  # dropped deliberately, since it expires and would break the link later.
+  share_url: "https://www.dropbox.com/scl/fi/raukw6mvyrkvnse7dvd0f/jensen-absinthe.pdf?rlkey=9jku1wruib7ro02y3w04h2vw7&raw=1"
   last_pushed: "2026-09-28T22:44:47Z"
 
 - paper: The Effects of Prosecutor Turnover on Criminal Case Outcomes

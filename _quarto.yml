@@ -1,6 +1,12 @@
 project:
   type: website
   output-dir: docs
+  # Quarto only copies a file into docs/ when a page links to it. The job market
+  # paper's title page links to nicholas-jensen.com/files/jensen-absinthe.pdf,
+  # and that link is baked into every copy already sent out, so the file must
+  # always ship - even while the site's own buttons point at Dropbox.
+  resources:
+    - files/jensen-absinthe.pdf
 
 website:
   title: "Nicholas A. Jensen"

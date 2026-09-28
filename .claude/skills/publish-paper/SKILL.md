@@ -104,6 +104,12 @@ page, the `?raw=1` form is what belongs on the website.
 
 ### 4. Update the site links
 
+The absinthe paper is also self-hosted at `files/jensen-absinthe.pdf`, kept
+alive by `resources:` in `_quarto.yml`: its title page links to
+`nicholas-jensen.com/files/jensen-absinthe.pdf`, baked into every copy already
+sent. When you publish a new draft, copy it over `files/jensen-absinthe.pdf`
+too, or that link serves a stale version.
+
 Put the URL where readers will find it — `research/index.qmd`, and
 `cv.qmd` if the paper is listed with a preprint or download link. Match the
 surrounding link idiom in each file. The `update-cv` skill covers the

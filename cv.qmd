@@ -191,38 +191,6 @@ A Statewide Analysis of All Crime Offenses During COVID. Annual Conference for C
 [June 2023]{.date}
 ::: -->
 
-### Colloquia, Conferences and Workshops
-
-::: {.cv-entry}
-2025 Seminar and Conference on Voluntary Governance (University of Pittsburgh)
-
-[September 4-7, 2025]{.date}
-:::
-
-::: {.cv-entry}
-Politics, Philosophy, and Economics Workshop (Chapman University)
-
-[July 2024]{.date}
-:::
-
-::: {.cv-entry}
-Causal Inference I Workshop with Scott Cunningham
-
-[February 2024]{.date}
-:::
-
-::: {.cv-entry}
-Regression Discontinuity Workshop with Rocio Titiunik
-
-[May 2023]{.date}
-:::
-
-::: {.cv-entry}
-Causal Inference II Workshop with Scott Cunningham
-
-[March 2023]{.date}
-:::
-
 ### Awards, Honors, and Grants
 
 ::: {.cv-entry}
@@ -277,6 +245,38 @@ Troy University
 Chancellor's Scholarship, Troy University
 
 [2014 -- 2019]{.date}
+:::
+
+### Colloquia, Conferences and Workshops
+
+::: {.cv-entry}
+2025 Seminar and Conference on Voluntary Governance (University of Pittsburgh)
+
+[September 4-7, 2025]{.date}
+:::
+
+::: {.cv-entry}
+Politics, Philosophy, and Economics Workshop (Chapman University)
+
+[July 2024]{.date}
+:::
+
+::: {.cv-entry}
+Causal Inference I Workshop with Scott Cunningham
+
+[February 2024]{.date}
+:::
+
+::: {.cv-entry}
+Regression Discontinuity Workshop with Rocio Titiunik
+
+[May 2023]{.date}
+:::
+
+::: {.cv-entry}
+Causal Inference II Workshop with Scott Cunningham
+
+[March 2023]{.date}
 :::
 
 ## Teaching Experience

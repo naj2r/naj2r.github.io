@@ -110,16 +110,34 @@ PDF build.
 ## Referees and the on-disk CVs
 
 There is always a current public CV and a current CV with references on disk,
-each as `.pdf` and `.tex`:
+each as `.pdf` and `.tex`, plus two variants without a References section:
 
 ```
 Dropbox\Job Market Materials\Job Market 2026\
   CV-snapshots\CV-Jensen_M-D-YY.pdf / .tex                              public
   CV-private\CV-Jensen-with-references-<Alternate>_M-D-YY.pdf / .tex    one per third-slot alternate
+  CV-private\CV-Jensen-no-references-ShortStephenson_M-D-YY.pdf / .tex          no References section, short institute name
+  CV-private\CV-Jensen-no-references-ShortStephenson-noJMP_M-D-YY.pdf / .tex    the same, without the "Job Market Paper" label
 ```
 
-All of them come from the same snapshot of `cv.qmd` in one run, so they differ
-only in the References section. `tools/render-site.ps1` rebuilds them after
+The two without references are for applications that take the reference list as
+its own document. They write "Stephenson Institute" instead of the full name
+throughout. The "Job Market Paper" label in `cv.qmd` is a switch, so the
+`noJMP` one is built, not hand-edited:
+
+```markdown
+(with Jacob Smith)[, *Job Market Paper*]{.content-visible unless-meta="no-jmp"} | [Download Paper (PDF)](...)
+```
+
+It shows on the site and in every other CV, and `-M no-jmp:true` hides it. Use
+the `noJMP` CV where the job market paper is chosen by fit. Keep that span
+intact when editing the entry, and if the label moves to another paper, move
+the span rather than touching the build. Your mobile number is added to the
+private CVs afterwards by `CV-private\add-mobile.ps1`, which lives outside this
+repository on purpose.
+
+All of them come from the same snapshot of `cv.qmd` in one run, so apart from
+the differences above they match. `tools/render-site.ps1` rebuilds them after
 every site render, so any CV change refreshes them automatically. The `.tex`
 files are the exact sources LuaLaTeX compiled, with the header inlined: each
 compiles alone in an empty folder, but needs LuaLaTeX or XeLaTeX (the CV uses

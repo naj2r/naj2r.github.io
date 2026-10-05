@@ -17,6 +17,19 @@
     With third-reference\ empty, a single CV-Jensen-with-references_<date>
     pair is built from references.md alone.
 
+    Two more variants carry no References section, for applications that take
+    the reference list as its own document, and use the short institute name
+    ("Stephenson Institute") throughout:
+
+      CV-private\CV-Jensen-no-references-ShortStephenson_<date>.pdf/.tex
+      CV-private\CV-Jensen-no-references-ShortStephenson-noJMP_<date>.pdf/.tex
+
+    The second also hides the "Job Market Paper" label, for applications where
+    the job market paper is chosen by fit. That label is a switch in cv.qmd
+    (content-visible unless-meta="no-jmp"); a render turns it off with
+    -M no-jmp:true. Neither holds referee details. The mobile number is added
+    afterwards by the private CV-private\add-mobile.ps1, as for the others.
+
     All variants render from the same snapshot of cv.qmd in one run, so they
     differ only in the References section. The public pair is saved first, so
     a problem in a referee file never stops the public CV from being current.
@@ -129,7 +142,10 @@ function Read-RefereeFile {
 
 # Render cv.qmd in $Dir to PDF, keeping the .tex. Returns $true on success.
 function Invoke-CvRender {
-    param([string] $Dir)
+    param([string] $Dir, [string[]] $Meta = @())
+
+    # Extra Quarto metadata, e.g. 'no-jmp:true' to hide the Job Market Paper label.
+    $metaArgs = (@($Meta) | ForEach-Object { '-M ' + $_ }) -join ' '
 
     # Clear outputs from any earlier render so a failure cannot leave a stale
     # file that looks like fresh output.
@@ -139,7 +155,7 @@ function Invoke-CvRender {
 
     Push-Location $Dir
     try {
-        cmd /c "quarto render cv.qmd --to pdf -M keep-tex:true > render.log 2>&1"
+        cmd /c "quarto render cv.qmd --to pdf -M keep-tex:true $metaArgs > render.log 2>&1"
         $rc = $LASTEXITCODE
     } finally {
         Pop-Location
@@ -225,6 +241,18 @@ foreach ($v in $variants) {
     $v | Add-Member -NotePropertyName Tex -NotePropertyValue (Join-Path $PrivateDir "$base.tex")
 }
 
+# CVs without a References section, with the short institute name throughout.
+# The second also hides the "Job Market Paper" label through the unless-meta
+# switch in cv.qmd. Neither holds referee details.
+$plainVariants = @(
+    [pscustomobject]@{ Title = 'CV without references (short institute name)';               Base = 'CV-Jensen-no-references-ShortStephenson';       HideJmp = $false }
+    [pscustomobject]@{ Title = 'CV without references (short institute name, no JMP label)'; Base = 'CV-Jensen-no-references-ShortStephenson-noJMP'; HideJmp = $true  }
+)
+foreach ($pv in $plainVariants) {
+    $pv | Add-Member -NotePropertyName Pdf -NotePropertyValue (Join-Path $PrivateDir ('{0}_{1}.pdf' -f $pv.Base, $Stamp))
+    $pv | Add-Member -NotePropertyName Tex -NotePropertyValue (Join-Path $PrivateDir ('{0}_{1}.tex' -f $pv.Base, $Stamp))
+}
+
 $publicPdf = Join-Path $PublicDir ('CV-Jensen_{0}.pdf' -f $Stamp)
 $publicTex = Join-Path $PublicDir ('CV-Jensen_{0}.tex' -f $Stamp)
 
@@ -242,7 +270,7 @@ if ($gitExit -eq 0 -and $common) {
     $publicRoots += (Split-Path ([System.IO.Path]::GetFullPath($common)) -Parent)
 }
 
-$privatePaths = @($ReferencesFile, $ThirdDir) + @($variants | ForEach-Object { $_.Pdf, $_.Tex })
+$privatePaths = @($ReferencesFile, $ThirdDir) + @(@($variants) + @($plainVariants) | ForEach-Object { $_.Pdf, $_.Tex })
 foreach ($root in $publicRoots) {
     foreach ($p in $privatePaths) {
         if (Test-PathInside $p $root) {
@@ -256,7 +284,7 @@ foreach ($root in $publicRoots) {
 # The publish staging folder is pushed to a shared Dropbox folder with public
 # links. No CV output belongs there.
 $stagingFolder = Join-Path $env:USERPROFILE 'website-materials'
-foreach ($p in @($publicPdf, $publicTex) + @($variants | ForEach-Object { $_.Pdf, $_.Tex })) {
+foreach ($p in @($publicPdf, $publicTex) + @(@($variants) + @($plainVariants) | ForEach-Object { $_.Pdf, $_.Tex })) {
     if (Test-PathInside $p $stagingFolder) {
         Write-Err 'REFUSING: a CV output would land in the publish staging folder.'
         Write-Host "  Everything in $stagingFolder is pushed to a public Dropbox share."
@@ -360,6 +388,61 @@ try {
         $saved.Add($publicPdf); $saved.Add($publicTex)
 
         # ------------------------------------------------------------------
+        # CVs without references. They need nothing from the referee files, so
+        # they sit ahead of the with-references section: a problem in a referee
+        # file never stops them.
+        # ------------------------------------------------------------------
+        $refEmails = @((@($fixed) + $alternates) | ForEach-Object { $_.Emails } | Sort-Object -Unique)
+        $fullName  = 'Stephenson Institute for Classical Liberalism'
+        foreach ($pv in $plainVariants) {
+            Write-Section $pv.Title
+
+            # Cut the whole References section, from its heading to the end marker.
+            $hm = [regex]::Matches($src, '(?m)^## References[ \t]*\r?$')
+            if ($hm.Count -ne 1 -or $hm[0].Index -gt $si) {
+                Write-Err 'cv.qmd must have exactly one "## References" heading ahead of the offline-references markers.'
+                $blocked.Add($pv.Title); continue
+            }
+            $cut = $src.Substring(0, $hm[0].Index) + $src.Substring($ei + $EndMarker.Length)
+            $cut = $cut.TrimEnd() + "`n"
+
+            if ($cut.IndexOf($fullName) -lt 0) {
+                Write-Err "cv.qmd no longer contains '$fullName', so there is nothing to shorten."
+                $blocked.Add($pv.Title); continue
+            }
+            $cut = $cut.Replace($fullName, 'Stephenson Institute')
+            [System.IO.File]::WriteAllText((Join-Path $WorkDir 'cv.qmd'), $cut, $Utf8NoBom)
+
+            $meta = @()
+            if ($pv.HideJmp) { $meta += 'no-jmp:true' }
+            if (-not @(Invoke-CvRender -Dir $WorkDir -Meta $meta)[-1]) { $blocked.Add($pv.Title); continue }
+
+            $tex  = [System.IO.File]::ReadAllText((Join-Path $WorkDir 'cv.tex'), [System.Text.Encoding]::UTF8)
+            $text = ''
+            if ($pdfToText) { $text = (& $pdfToText -layout (Join-Path $WorkDir 'docs\cv.pdf') - | Out-String) }
+            $all = $tex + "`n" + $text
+
+            # The label can be split across a line break in the .tex, so match
+            # on any run of whitespace.
+            $bad = @()
+            if ($all.IndexOf($fullName) -ge 0)                                  { $bad += 'the full institute name is still there' }
+            if ($all.IndexOf('Stephenson Institute') -lt 0)                     { $bad += 'the short institute name is missing' }
+            $jmp = [regex]::IsMatch($all, 'Job\s+Market\s+Paper')
+            if ($pv.HideJmp -and $jmp)           { $bad += 'the Job Market Paper label is still there' }
+            if (-not $pv.HideJmp -and -not $jmp) { $bad += 'the Job Market Paper label is missing' }
+            if ($tex -match '\\subsection\{References\}' -or $text -match '(?m)^\s*References\s*$') { $bad += 'a References section is present' }
+            if (@($refEmails | Where-Object { $all.IndexOf($_, [System.StringComparison]::OrdinalIgnoreCase) -ge 0 }).Count -gt 0) { $bad += 'a referee email address is present' }
+            if (@(Get-Phones $all).Count -gt 0)  { $bad += 'a phone number is present' }
+            if ($bad.Count -gt 0) {
+                foreach ($b in $bad) { Write-Err $b }
+                $blocked.Add($pv.Title); continue
+            }
+            Write-Ok ('short institute name throughout; Job Market Paper label {0}; no References section; no referee details' -f $(if ($pv.HideJmp) { 'hidden' } else { 'kept' }))
+            Save-Pair -Dir $WorkDir -PdfDest $pv.Pdf -TexDest $pv.Tex
+            $saved.Add($pv.Pdf); $saved.Add($pv.Tex)
+        }
+
+        # ------------------------------------------------------------------
         # CVs with references
         # ------------------------------------------------------------------
         if ($fixed.Problems.Count -gt 0) {
@@ -448,6 +531,12 @@ if ($saved | Where-Object { $_ -like '*with-references*' }) {
     Write-Host ''
     Write-Host '  CVs with references carry referees'' phone numbers. Send them with' -ForegroundColor Yellow
     Write-Host '  applications; never stage them for publishing (publish.ps1 refuses them).' -ForegroundColor Yellow
+}
+
+if ($saved | Where-Object { $_ -like '*no-references*' }) {
+    Write-Host ''
+    Write-Host '  The CVs without references still need your mobile number: run the private' -ForegroundColor Yellow
+    Write-Host '  CV-private\add-mobile.ps1. With it they carry a phone number; never publish them.' -ForegroundColor Yellow
 }
 
 if ($exitCode -ne 0) { exit $exitCode }

@@ -30,6 +30,10 @@
     -M no-jmp:true. Neither holds referee details. The mobile number is added
     afterwards by the private CV-private\add-mobile.ps1, as for the others.
 
+    Each CV with references also has a twin with the short institute name and
+    no "Job Market Paper" label (CV-Jensen-with-references-<Alternate>-
+    ShortStephenson-noJMP_<date>), built the same way as the no-references ones.
+
     All variants render from the same snapshot of cv.qmd in one run, so they
     differ only in the References section. The public pair is saved first, so
     a problem in a referee file never stops the public CV from being current.
@@ -226,17 +230,23 @@ Write-Ok "fixed referees: $ReferencesFile"
 Write-Ok ("third-slot alternates: {0}" -f $(if ($alternates.Count) { ($alternates | ForEach-Object { $_.Name }) -join ', ' } else { 'none' }))
 
 # One variant per alternate; with no alternates, one variant of the fixed list.
+# Each also gets a twin with the short institute name and no "Job Market Paper"
+# label, for applications where the job market paper is chosen by fit.
 $variants = @()
 if ($alternates.Count -eq 0) {
-    $variants += [pscustomobject]@{ Label = ''; Parts = @($fixed) }
+    $variants += [pscustomobject]@{ Label = ''; Parts = @($fixed); Short = $false; HideJmp = $false; Suffix = '' }
 } else {
     foreach ($a in $alternates) {
         $label = $a.Name -replace '[^A-Za-z0-9-]', ''
-        $variants += [pscustomobject]@{ Label = $label; Parts = @($fixed, $a) }
+        $variants += [pscustomobject]@{ Label = $label; Parts = @($fixed, $a); Short = $false; HideJmp = $false; Suffix = '' }
     }
 }
+$variants += @($variants | ForEach-Object {
+    [pscustomobject]@{ Label = $_.Label; Parts = $_.Parts; Short = $true; HideJmp = $true; Suffix = '-ShortStephenson-noJMP' }
+})
 foreach ($v in $variants) {
-    $base = if ($v.Label) { 'CV-Jensen-with-references-{0}_{1}' -f $v.Label, $Stamp } else { 'CV-Jensen-with-references_{0}' -f $Stamp }
+    $stem = if ($v.Label) { 'CV-Jensen-with-references-{0}' -f $v.Label } else { 'CV-Jensen-with-references' }
+    $base = '{0}{1}_{2}' -f $stem, $v.Suffix, $Stamp
     $v | Add-Member -NotePropertyName Pdf -NotePropertyValue (Join-Path $PrivateDir "$base.pdf")
     $v | Add-Member -NotePropertyName Tex -NotePropertyValue (Join-Path $PrivateDir "$base.tex")
 }
@@ -455,6 +465,7 @@ try {
 
         foreach ($v in $variants) {
             $title = if ($v.Label) { "CV with references (third slot: $($v.Label))" } else { 'CV with references' }
+            if ($v.Short) { $title += ' - short institute name, no JMP label' }
             Write-Section $title
 
             $alt = if ($v.Label) { $v.Parts[-1] } else { $null }
@@ -467,9 +478,15 @@ try {
 
             $grid = "::: {.cv-referees}`n`n" + (($v.Parts | ForEach-Object { $_.Body }) -join "`n`n") + "`n`n:::"
             $spliced = $src.Substring(0, $startClose + 3) + "`n`n" + $grid + "`n`n" + $src.Substring($ei)
+            if ($v.Short) {
+                # Shortened everywhere, including the referee entry from the private file.
+                $spliced = $spliced.Replace('Stephenson Institute for Classical Liberalism', 'Stephenson Institute')
+            }
             [System.IO.File]::WriteAllText((Join-Path $WorkDir 'cv.qmd'), $spliced, $Utf8NoBom)
 
-            if (-not @(Invoke-CvRender -Dir $WorkDir)[-1]) { $blocked.Add($title); continue }
+            $meta = @()
+            if ($v.HideJmp) { $meta += 'no-jmp:true' }
+            if (-not @(Invoke-CvRender -Dir $WorkDir -Meta $meta)[-1]) { $blocked.Add($title); continue }
 
             $want      = @($v.Parts | ForEach-Object { $_.Emails } | Sort-Object -Unique)
             $wantPhone = @($v.Parts | ForEach-Object { $_.Phones } | Sort-Object -Unique)
@@ -502,6 +519,16 @@ try {
                 Write-Err "$($missingPhone.Count) referee phone number(s) did not make it into the CV - the swap may not have taken effect."
                 $blocked.Add($title); continue
             }
+            if ($v.Short) {
+                $bad = @()
+                $all = $tex + "`n" + $text
+                if ($all.IndexOf('Stephenson Institute for Classical Liberalism') -ge 0) { $bad += 'the full institute name is still there' }
+                if ([regex]::IsMatch($all, 'Job\s+Market\s+Paper'))                       { $bad += 'the Job Market Paper label is still there' }
+                if ($bad.Count -gt 0) {
+                    foreach ($b in $bad) { Write-Err $b }
+                    $blocked.Add($title); continue
+                }
+            }
             Write-Ok "all $($want.Count) referee email(s) and $($wantPhone.Count) phone number(s) present"
             Save-Pair -Dir $WorkDir -PdfDest $v.Pdf -TexDest $v.Tex
             $saved.Add($v.Pdf); $saved.Add($v.Tex)
@@ -533,10 +560,10 @@ if ($saved | Where-Object { $_ -like '*with-references*' }) {
     Write-Host '  applications; never stage them for publishing (publish.ps1 refuses them).' -ForegroundColor Yellow
 }
 
-if ($saved | Where-Object { $_ -like '*no-references*' }) {
+if ($saved | Where-Object { $_ -like '*references*' }) {
     Write-Host ''
-    Write-Host '  The CVs without references still need your mobile number: run the private' -ForegroundColor Yellow
-    Write-Host '  CV-private\add-mobile.ps1. With it they carry a phone number; never publish them.' -ForegroundColor Yellow
+    Write-Host '  The private CVs still need your mobile number: run CV-private\add-mobile.ps1.' -ForegroundColor Yellow
+    Write-Host '  With it they carry a phone number; never publish them.' -ForegroundColor Yellow
 }
 
 if ($exitCode -ne 0) { exit $exitCode }

@@ -118,6 +118,7 @@ Dropbox\Job Market Materials\Job Market 2026\
   CV-private\CV-Jensen-with-references-<Alternate>_M-D-YY.pdf / .tex    one per third-slot alternate
   CV-private\CV-Jensen-no-references-ShortStephenson_M-D-YY.pdf / .tex          no References section, short institute name
   CV-private\CV-Jensen-no-references-ShortStephenson-noJMP_M-D-YY.pdf / .tex    the same, without the "Job Market Paper" label
+  CV-private\CV-Jensen-with-references-<Alternate>-ShortStephenson-noJMP_M-D-YY.pdf / .tex    with references, short name, no label
 ```
 
 The two without references are for applications that take the reference list as
@@ -130,7 +131,7 @@ throughout. The "Job Market Paper" label in `cv.qmd` is a switch, so the
 ```
 
 It shows on the site and in every other CV, and `-M no-jmp:true` hides it. Use
-the `noJMP` CV where the job market paper is chosen by fit. Keep that span
+a `noJMP` CV (with or without references) where the job market paper is chosen by fit. Keep that span
 intact when editing the entry, and if the label moves to another paper, move
 the span rather than touching the build. Your mobile number is added to the
 private CVs afterwards by `CV-private\add-mobile.ps1`, which lives outside this

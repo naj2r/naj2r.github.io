@@ -24,11 +24,13 @@
       CV-private\CV-Jensen-no-references-ShortStephenson_<date>.pdf/.tex
       CV-private\CV-Jensen-no-references-ShortStephenson-noJMP_<date>.pdf/.tex
 
-    The second also hides the "Job Market Paper" label, for applications where
-    the job market paper is chosen by fit. That label is a switch in cv.qmd
-    (content-visible unless-meta="no-jmp"); a render turns it off with
-    -M no-jmp:true. Neither holds referee details. The mobile number is added
-    afterwards by the private CV-private\add-mobile.ps1, as for the others.
+    The first carries the "Job Market Paper" label; the second leaves it out,
+    for applications where the job market paper is chosen by fit. The label is
+    a switch in cv.qmd (content-visible when-meta="jmp"). It is off by default,
+    so the website and the public CV show none, and this build turns it on with
+    -M jmp:true for the CVs that carry it. Neither of these holds referee
+    details. The mobile number is added afterwards by the private
+    CV-private\add-mobile.ps1, as for the others.
 
     Each CV with references also has a twin with the short institute name and
     no "Job Market Paper" label (CV-Jensen-with-references-<Alternate>-
@@ -148,7 +150,7 @@ function Read-RefereeFile {
 function Invoke-CvRender {
     param([string] $Dir, [string[]] $Meta = @())
 
-    # Extra Quarto metadata, e.g. 'no-jmp:true' to hide the Job Market Paper label.
+    # Extra Quarto metadata, e.g. 'jmp:true' to show the Job Market Paper label.
     $metaArgs = (@($Meta) | ForEach-Object { '-M ' + $_ }) -join ' '
 
     # Clear outputs from any earlier render so a failure cannot leave a stale
@@ -252,8 +254,9 @@ foreach ($v in $variants) {
 }
 
 # CVs without a References section, with the short institute name throughout.
-# The second also hides the "Job Market Paper" label through the unless-meta
-# switch in cv.qmd. Neither holds referee details.
+# The first turns the "Job Market Paper" label on through the when-meta switch
+# in cv.qmd (it is off by default); the second leaves it off. Neither holds
+# referee details.
 $plainVariants = @(
     [pscustomobject]@{ Title = 'CV without references (short institute name)';               Base = 'CV-Jensen-no-references-ShortStephenson';       HideJmp = $false }
     [pscustomobject]@{ Title = 'CV without references (short institute name, no JMP label)'; Base = 'CV-Jensen-no-references-ShortStephenson-noJMP'; HideJmp = $true  }
@@ -424,7 +427,7 @@ try {
             [System.IO.File]::WriteAllText((Join-Path $WorkDir 'cv.qmd'), $cut, $Utf8NoBom)
 
             $meta = @()
-            if ($pv.HideJmp) { $meta += 'no-jmp:true' }
+            if (-not $pv.HideJmp) { $meta += 'jmp:true' }
             if (-not @(Invoke-CvRender -Dir $WorkDir -Meta $meta)[-1]) { $blocked.Add($pv.Title); continue }
 
             $tex  = [System.IO.File]::ReadAllText((Join-Path $WorkDir 'cv.tex'), [System.Text.Encoding]::UTF8)
@@ -485,7 +488,7 @@ try {
             [System.IO.File]::WriteAllText((Join-Path $WorkDir 'cv.qmd'), $spliced, $Utf8NoBom)
 
             $meta = @()
-            if ($v.HideJmp) { $meta += 'no-jmp:true' }
+            if (-not $v.HideJmp) { $meta += 'jmp:true' }
             if (-not @(Invoke-CvRender -Dir $WorkDir -Meta $meta)[-1]) { $blocked.Add($title); continue }
 
             $want      = @($v.Parts | ForEach-Object { $_.Emails } | Sort-Object -Unique)

@@ -124,14 +124,17 @@ Dropbox\Job Market Materials\Job Market 2026\
 The two without references are for applications that take the reference list as
 its own document. They write "Stephenson Institute" instead of the full name
 throughout. The "Job Market Paper" label in `cv.qmd` is a switch, so the
-`noJMP` one is built, not hand-edited:
+`noJMP` ones are built, not hand-edited:
 
 ```markdown
-(with Jacob Smith)[, *Job Market Paper*]{.content-visible unless-meta="no-jmp"} | [Download Paper (PDF)](...)
+(with Jacob Smith)[, *Job Market Paper*]{.content-visible when-meta="jmp"} | [Download Paper (PDF)](...)
 ```
 
-It shows on the site and in every other CV, and `-M no-jmp:true` hides it. Use
-a `noJMP` CV (with or without references) where the job market paper is chosen by fit. Keep that span
+It is off by default, so the website and the public CV show no label, and the
+research page lists the paper as a Working Paper. A render turns the label on
+with `-M jmp:true`, which the build does for the private CVs that carry it
+(the standard ones) and not for the `noJMP` ones. Use a `noJMP` CV (with or
+without references) where the job market paper is chosen by fit. Keep that span
 intact when editing the entry, and if the label moves to another paper, move
 the span rather than touching the build. Your mobile number is added to the
 private CVs afterwards by `CV-private\add-mobile.ps1`, which lives outside this

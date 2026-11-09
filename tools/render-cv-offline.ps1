@@ -30,7 +30,8 @@
     so the website and the public CV show none, and this build turns it on with
     -M jmp:true for the CVs that carry it. Neither of these holds referee
     details. The mobile number is added afterwards by the private
-    CV-private\add-mobile.ps1, as for the others.
+    CV-private\add-mobile.ps1, as for the others. While cv.qmd carries no such
+    label (as of November 2026 it has none), the two CVs have identical content.
 
     Each CV with references also has a twin with the short institute name and
     no "Job Market Paper" label (CV-Jensen-with-references-<Alternate>-
@@ -441,8 +442,10 @@ try {
             if ($all.IndexOf($fullName) -ge 0)                                  { $bad += 'the full institute name is still there' }
             if ($all.IndexOf('Stephenson Institute') -lt 0)                     { $bad += 'the short institute name is missing' }
             $jmp = [regex]::IsMatch($all, 'Job\s+Market\s+Paper')
-            if ($pv.HideJmp -and $jmp)           { $bad += 'the Job Market Paper label is still there' }
-            if (-not $pv.HideJmp -and -not $jmp) { $bad += 'the Job Market Paper label is missing' }
+            # The label exists only while cv.qmd carries the when-meta="jmp" switch.
+            $hasSwitch = ($src.IndexOf('when-meta="jmp"') -ge 0)
+            if ($pv.HideJmp -and $jmp)                                  { $bad += 'the Job Market Paper label is still there' }
+            if ($hasSwitch -and -not $pv.HideJmp -and -not $jmp)        { $bad += 'the Job Market Paper label is missing' }
             if ($tex -match '\\subsection\{References\}' -or $text -match '(?m)^\s*References\s*$') { $bad += 'a References section is present' }
             if (@($refEmails | Where-Object { $all.IndexOf($_, [System.StringComparison]::OrdinalIgnoreCase) -ge 0 }).Count -gt 0) { $bad += 'a referee email address is present' }
             if (@(Get-Phones $all).Count -gt 0)  { $bad += 'a phone number is present' }
@@ -450,7 +453,8 @@ try {
                 foreach ($b in $bad) { Write-Err $b }
                 $blocked.Add($pv.Title); continue
             }
-            Write-Ok ('short institute name throughout; Job Market Paper label {0}; no References section; no referee details' -f $(if ($pv.HideJmp) { 'hidden' } else { 'kept' }))
+            $labelNote = if (-not $hasSwitch) { 'none in cv.qmd' } elseif ($pv.HideJmp) { 'hidden' } else { 'kept' }
+            Write-Ok ('short institute name throughout; Job Market Paper label {0}; no References section; no referee details' -f $labelNote)
             Save-Pair -Dir $WorkDir -PdfDest $pv.Pdf -TexDest $pv.Tex
             $saved.Add($pv.Pdf); $saved.Add($pv.Tex)
         }

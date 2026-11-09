@@ -120,7 +120,7 @@ Troy University, Economics Dept.
 
 ### Under Review
 
-- "Regulatory Rollback and the Smoking Tailpipe: Air-Quality Effects of Repealing Vehicle Emissions Testing" (with Patricia J. Hummel and Nicholas Reinarts), at *Journal of Regulatory Economics* (revise and resubmit, second round) | [Preprint](https://www.dropbox.com/scl/fi/t2cq95ilvsbyczac5r7pm/jensen-emissions.pdf?rlkey=k4n6yobakkxj68808s2ie09n7&raw=1)
+- "Regulatory Rollback and the Smoking Tailpipe: Air-Quality Effects of Repealing Vehicle Emissions Testing" (with Patricia J. Hummel and Nicholas Reinarts), at *Journal of Regulatory Economics* (revise and resubmit; second revision under review) | [Preprint](https://www.dropbox.com/scl/fi/t2cq95ilvsbyczac5r7pm/jensen-emissions.pdf?rlkey=k4n6yobakkxj68808s2ie09n7&raw=1)
 - "Who Killed the Green Fairy? Temperance, Language, and Wine in the Swiss Absinthe Ban of 1908" (with Jacob Smith), at *Explorations in Economic History* | [Preprint](https://www.dropbox.com/scl/fi/raukw6mvyrkvnse7dvd0f/jensen-absinthe.pdf?rlkey=9jku1wruib7ro02y3w04h2vw7&raw=1)
 
 ### Working Papers
@@ -200,7 +200,7 @@ Hayek Fund for Scholars
 :::
 
 ::: {.cv-entry}
-APEE Young Scholar's Award
+APEE Young Scholars Program Award
 
 [2024]{.date}
 :::
@@ -296,7 +296,7 @@ ECN 332-01 & ECN 332-02 Money & Banking
 :::
 
 ::: {.cv-entry}
-STA 120 Introductory Statistics
+STA 120 Introductory Statistics (online)
 
 [Summer 2025]{.date}
 :::
@@ -309,18 +309,10 @@ ECON 2410 Principles of Macroeconomics
 [Fall 2023]{.date}
 :::
 
-::: {.cv-detail}
-Instructor evaluation: 3.98 / 5.0 (27 students, in-person class)
-:::
-
 ::: {.cv-entry}
 ECON 2410 Principles of Macroeconomics
 
 [Spring 2024]{.date}
-:::
-
-::: {.cv-detail}
-Instructor evaluation: 4.05 / 5.0 (43 students, in-person class)
 :::
 
 ::: {.cv-entry}

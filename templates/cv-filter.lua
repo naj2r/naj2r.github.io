@@ -108,7 +108,7 @@ function Div(el)
             left_content = latex_stringify(pandoc.Para(left_text))
           end
           local raw = "\\noindent"
-            .. "\\begin{minipage}[t]{0.70\\textwidth}" .. left_content .. "\\end{minipage}"
+            .. "\\begin{minipage}[t]{0.70\\textwidth}\\raggedright " .. left_content .. "\\end{minipage}"
             .. "\\hfill"
             .. "\\begin{minipage}[t]{0.28\\textwidth}\\raggedleft\\textit{" .. escape_latex(date_text) .. "}\\end{minipage}"
             .. "\\par\\vspace{1pt}"

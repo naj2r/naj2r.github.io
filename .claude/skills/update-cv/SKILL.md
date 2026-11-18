@@ -149,8 +149,9 @@ The public CV lists referees with their name, position, institution and
 email: university-affiliated details they agreed to publish. It never carries
 a **phone number** or anything personal. This repository is public on GitHub,
 so whatever is written into `cv.qmd`, or any file in the repo, is published.
-The list in `cv.qmd` is hand-maintained; its third slot is whichever alternate
-is current (Vaca Pereira Rocha for now).
+The list in `cv.qmd` is hand-maintained. The public CV lists all four referees
+(the two on every application, then both third-slot alternates, Vaca Pereira
+Rocha and Snow); each private CV with references carries only one alternate.
 
 Their full contact details, phone numbers included, live only **outside** the
 repo:
